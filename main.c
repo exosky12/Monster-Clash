@@ -4,7 +4,7 @@ void global(void){
   bool quit = False;
   int choix;
   while(!quit){
-    printf("--------- MENU ---------\n");
+    printf("▁ ▂ ▄ ▅ ▆ ▇ █  MENU  █ ▇ ▆ ▅ ▄ ▂ ▁\n");
     printf("\t1. jouer une partie prédéfinie\n");
     printf("\t2. créer une nouvelle partie\n");
     printf("\t3. afficher la liste des joueurs triée par nom\n");
