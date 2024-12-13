@@ -1,86 +1,97 @@
 #include "main.h"
 
-File file1Vide(void)
+File FileVide(void)
 {
-    File f;
-    f.t = NULL;
-    f.q = NULL;
+    return NULL;
+}
+
+File adjq(File f, int x)
+{
+    Maillon2 *m;
+    m=(Maillon2*)malloc(sizeof(Maillon2));
+
+    if(m==NULL)
+    {
+        printf("Pb malloc!");
+        exit(1);
+    } 
+
+    m->v=x;
+
+    if(f==NULL)
+    {
+        m->suiv=m;
+        return m;
+    }
+
+    m->suiv = f->suiv;
+    f->suiv=m;
+    return m;
+}
+
+File supprimerEnTete(File f)
+{
+    Maillon2 *aux;
+    if(f==NULL)
+    {
+        printf("pb opération interdite !");
+        exit(1);
+    }
+    if(f==f->suiv)
+    {
+        free(f);
+        return FileVide();
+    }
+
+    aux = f->suiv;
+    f->suiv = f-> suiv->suiv;
+    free(aux);
     return f;
 }
 
-File emphiler(File f, int x)
+Boolean estVide2(File f)
 {
-    Maillon *m;
-    m = (Maillon *)malloc(sizeof(Maillon));
-    if (m == NULL)
+    return f==NULL;
+}
+
+int tete2(File f)
+{
+    if(estVide2(f))
     {
-        printf("Opération interdite");
+        printf("pbm file vide");
         exit(1);
     }
-    m->v = x;
-    m->suiv = NULL;
-    if (estVide(f))
-    {
-        f.t = m;
-        f.q = m;
-    }
-    f.q->suiv = m;
-    f.q = m;
-    return f;
+    return f->suiv->v;
 }
 
-File supprimer(File f)
+void affiche(File f)
 {
-    Maillon *m;
-    if (f.t == NULL && f.q == NULL)
+    Maillon2 *m;
+
+    if(f==NULL)
+        return;
+    m=f->suiv;
+
+    while(m != f)
     {
-        printf("Opération interdite");
-        exit(1);
-    }
-    if (f.t == f.q)
-    {
-        free(f.t);
-        return file1Vide();
-    }
-    m = f.t;
-    f.t = f.t->suiv;
-    free(m);
-    return f;
+        printf("%d",m->v);
+        m=m->suiv;
+    } 
+    printf("%d\n",m->v);
 }
 
-Boolean estVide(File f)
+int longueur2(File f)
 {
-    return f.t == NULL && f.q == NULL;
-}
-
-int longueur(File f)
-{
-    int l = 0;
-    while (f.t != NULL)
+    int i = 0;
+    Maillon2 *m;
+    m = f->suiv;
+    while(m != f)
     {
-        l++;
-        f.t = f.t->suiv;
+        i++;
+        m = m->suiv;
     }
-    return l;
-}
-
-void afficher(File f)
-{
-    while (f.t != NULL)
-    {
-        printf("%d", f.t->v);
-        f.t = f.t->suiv;
-    }
-}
-
-int tete(File f)
-{
-    if (estVide(f))
-    {
-        printf("Opération interdite");
-        exit(1);
-    }
-    return f.t->v;
+    i++;
+    return i;
 }
 
 void existingGameDisplay(void)
