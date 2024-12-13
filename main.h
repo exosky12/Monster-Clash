@@ -4,11 +4,11 @@
 
 typedef enum {False, True} Boolean;
 
-typedef struct maillon2
+typedef struct Node
 {
     int v;
-    struct maillon2 *suiv;
-} Maillon2, *File;
+    struct Node *suiv;
+} Node, *Heap;
 
 typedef struct {
     char nom[50];           // Nom du monstre
@@ -25,13 +25,13 @@ typedef struct {
     int type;               // Type du groupe : 1 pour séquentiel, 2 pour simultané
 } GroupeMonstres;
 
-File FileVide(void);
-File adjq(File f, int x);
-File supprimerEnTete(File f);
-Boolean estVide2(File f);
-int tete2(File f);
-void affiche(File f);
-int longueur2(File f);
+Heap heapEmpty(void);
+Heap add(Heap f, int x);
+Heap deleteHead(Heap f);
+Boolean isEmpty(Heap f);
+int head(Heap f);
+void display(Heap f);
+int length(Heap f);
 
 void global(void);
 void clearScreen(void);

@@ -1,14 +1,14 @@
 #include "main.h"
 
-File FileVide(void)
+Heap heapEmpty(void)
 {
     return NULL;
 }
 
-File adjq(File f, int x)
+Heap add(Heap f, int x)
 {
-    Maillon2 *m;
-    m=(Maillon2*)malloc(sizeof(Maillon2));
+    Node *m;
+    m=(Node*)malloc(sizeof(Node));
 
     if(m==NULL)
     {
@@ -29,9 +29,9 @@ File adjq(File f, int x)
     return m;
 }
 
-File supprimerEnTete(File f)
+Heap deleteHead(Heap f)
 {
-    Maillon2 *aux;
+    Node *aux;
     if(f==NULL)
     {
         printf("pb opération interdite !");
@@ -40,7 +40,7 @@ File supprimerEnTete(File f)
     if(f==f->suiv)
     {
         free(f);
-        return FileVide();
+        return HeapVide();
     }
 
     aux = f->suiv;
@@ -49,24 +49,24 @@ File supprimerEnTete(File f)
     return f;
 }
 
-Boolean estVide2(File f)
+Boolean isEmpty(Heap f)
 {
     return f==NULL;
 }
 
-int tete2(File f)
+int head(Heap f)
 {
-    if(estVide2(f))
+    if(estVide(f))
     {
-        printf("pbm file vide");
+        printf("pbm Heap vide");
         exit(1);
     }
     return f->suiv->v;
 }
 
-void affiche(File f)
+void display(Heap f)
 {
-    Maillon2 *m;
+    Node *m;
 
     if(f==NULL)
         return;
@@ -80,10 +80,10 @@ void affiche(File f)
     printf("%d\n",m->v);
 }
 
-int longueur2(File f)
+int length(Heap f)
 {
     int i = 0;
-    Maillon2 *m;
+    Node *m;
     m = f->suiv;
     while(m != f)
     {
@@ -96,14 +96,14 @@ int longueur2(File f)
 
 void existingGameDisplay(void)
 {
-  FILE *gameFile;
+  Heap *gameHeap;
   char gameName[100], playerName[100];
   clearScreen();
   printf("▁ ▂ ▄ ▅ ▆ ▇ █ Jouer une partie prédéfinie █ ▇ ▆ ▅ ▄ ▂ ▁\n\n");
   printf("Entrer le nom du fichier correspondant à la partie > ");
   scanf("%s", gameName);
-  gameFile = fopen(gameName, "rb");
-  if (gameFile == NULL){
+  gameHeap = fopen(gameName, "rb");
+  if (gameHeap == NULL){
     printf("[ERREUR] Fichier introuvable\n");
     return;
   }
