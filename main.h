@@ -42,11 +42,13 @@ int head(Heap f);
 void display(Heap f);
 int length(Heap f);
 
-void global(void);
-void clearScreen(void);
 void existingGameDisplay(void);
 void existingGame(void);
+void global(void);
+void clearScreen(void);
+void existingGameDisplay(Player *playersTab, int nbPlayers)
+void game(void);
 void createNewGameDisplay();
-void createNewGame(char nickname[50], Player playersTab[100]);
 int loadData(void);
 char determineWinner(char weaponPlayer, char weaponMonster);
+int dichotomousSearch(char playerName[50], Player playersTab[100], int nbPlayers, int *trouve);
