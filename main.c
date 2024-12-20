@@ -40,7 +40,7 @@ Heap deleteHead(Heap f)
     if(f==f->suiv)
     {
         free(f);
-        return HeapVide();
+        return heapEmpty();
     }
 
     aux = f->suiv;
@@ -56,7 +56,7 @@ Boolean isEmpty(Heap f)
 
 int head(Heap f)
 {
-    if(estVide(f))
+    if(isEmpty(f))
     {
         printf("pbm Heap vide");
         exit(1);
@@ -96,7 +96,7 @@ int length(Heap f)
 
 void existingGameDisplay(void)
 {
-  Heap *gameHeap;
+  FILE *gameHeap;
   char gameName[100], playerName[100];
   clearScreen();
   printf("▁ ▂ ▄ ▅ ▆ ▇ █ Jouer une partie prédéfinie █ ▇ ▆ ▅ ▄ ▂ ▁\n\n");
@@ -121,23 +121,78 @@ void existingGame(void)
 
 void createNewGameDisplay()
 {
-  char playerName[100];
+  char nickname[50];
   clearScreen();
   printf("▁ ▂ ▄ ▅ ▆ ▇ █ Créer une nouvelle partie █ ▇ ▆ ▅ ▄ ▂ ▁\n\n");
   printf("Entrer votre pseudo > ");
-  scanf("%s", playerName);
-  createNewGame();
+  scanf("%s", nickname);
+  //createNewGame(nickname, playersTab);
 }
 
 // Ajouter type de retour et paramètres
-void createNewGame(void)
+void createNewGame(char nickname[50], Player playersTab[100])
 {
-    // Ajouter code
+  Player player;
+  strcpy(player.nickname, nickname);
+  player.nbPv = 20;
+  player.nbDamages = 0;
+  
+
+  // Ajouter code
+}
+
+int loadData(void)
+{
+  Player *playersTab;
+  int nbPlayers = 0;
+
+  //charger nbPlayers
+
+  playersTab = (Player*)malloc(nbPlayers*sizeof(Player));
+}
+
+char determineWinner(char weaponPlayer, char weaponMonster) {
+    if (weaponPlayer == weaponMonster) {
+        return 'D';
+    }
+    if (weaponPlayer == '#') {
+        return 'P';
+    }
+    if (weaponMonster == '#') {
+        return 'M';
+    }
+    if (weaponPlayer == 'O') {
+        return 'M';
+    }
+    if (weaponMonster == 'O') {
+        return 'P';
+    }
+    if (weaponPlayer == 'P' && weaponMonster == 'C') {
+        return 'P';
+    }
+    if (weaponPlayer == 'C' && weaponMonster == 'F') {
+        return 'P';
+    }
+    if (weaponPlayer == 'F' && weaponMonster == 'P') {
+        return 'P';
+    }
+    if (weaponMonster == 'P' && weaponPlayer == 'C') {
+        return 'M';
+    }
+    if (weaponMonster == 'C' && weaponPlayer == 'F') {
+        return 'M';
+    }
+    if (weaponMonster == 'F' && weaponPlayer == 'P') {
+        return 'M';
+    }
+    return 'D';
 }
 
 void global(void){
   Boolean quit = False;
   int choice;
+  
+  
   while(!quit){
     clearScreen();
     printf("\n\t▁ ▂ ▄ ▅ ▆ ▇ █  MENU  █ ▇ ▆ ▅ ▄ ▂ ▁\n\n\n");
@@ -178,3 +233,4 @@ void clearScreen(void)
         printf("\n");
     }
 }
+

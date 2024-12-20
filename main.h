@@ -11,19 +11,28 @@ typedef struct Node
 } Node, *Heap;
 
 typedef struct {
-    char nom[50];           // Nom du monstre
-    int niveau;             // Niveau du monstre (1, 2 ou 3)
-    int pointsVie;          // Points de vie du monstre
-    int pointsDegats;       // Points de dégâts infligés par attaque
-    char armes[5];          // Liste des armes disponibles ('P', 'F', 'C', 'O', '#')
-    int nbArmes;            // Nombre d'armes disponibles
-} Monstre;
+    char nickname[50];    // Surnom du joueur (maximum 50 caractères + caractère de fin de chaîne)
+    int nbPv;              // Nombre de points de vie du joueur
+    int nbDamages;          // Nombre total de dégâts infligés par le joueur
+    int nbGames;          // Nombre de jeux/joues auxquels le joueur a participé
+    int *scores;           // Scores
+    char weapons[5];   // Liste des armes disponibles pour le joueur ('P', 'F', 'C', 'O', '#')
+} Player;
 
 typedef struct {
-    Monstre *monstres;      // Tableau dynamique de monstres
-    int nbMonstres;         // Nombre de monstres dans le groupe
+    char name[50];           // Nom du monstre
+    int level;             // Niveau du monstre (1, 2 ou 3)
+    int pv;          // Points de vie du monstre
+    int damage;       // Points de dégâts infligés par attaque
+    char weapons[5];          // Liste des armes disponibles ('P', 'F', 'C', 'O', '#')
+    int nbWeapons;            // Nombre d'armes disponibles
+} Monster;
+
+typedef struct {
+    Monster *monsters;      // Tableau dynamique de monstres
+    int nbMonsters;         // Nombre de monstres dans le groupe
     int type;               // Type du groupe : 1 pour séquentiel, 2 pour simultané
-} GroupeMonstres;
+} MonstersGroup;
 
 Heap heapEmpty(void);
 Heap add(Heap f, int x);
@@ -38,4 +47,6 @@ void clearScreen(void);
 void existingGameDisplay(void);
 void existingGame(void);
 void createNewGameDisplay();
-void createNewGame(void);
+void createNewGame(char nickname[50], Player playersTab[100]);
+int loadData(void);
+char determineWinner(char weaponPlayer, char weaponMonster);
