@@ -96,6 +96,10 @@ int length(Heap f)
 
 void existingGameDisplay(Player **playersTab, int *nbPlayers)
 {
+    //
+    // Ici beaucoup en commentaire car c'était pour tester si l'ajout et la sauvegarde de nouveau fonctionnait
+    //
+    
     //FILE *gameHeap;
     char gameName[100], playerName[100];
     int trouve, index;
