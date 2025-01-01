@@ -16,7 +16,7 @@ typedef struct {
     int nbDamages;          // Nombre total de dégâts infligés par le joueur
     int nbGames;          // Nombre de jeux/joues auxquels le joueur a participé
     int *scores;           // Scores
-    char weapons[5];   // Liste des armes disponibles pour le joueur ('P', 'F', 'C', 'O', '#')
+    char weapons[4];   // Liste des armes disponibles pour le joueur ('P', 'F', 'C', 'O', '#')
 } Player;
 
 typedef struct {
@@ -24,8 +24,8 @@ typedef struct {
     int level;             // Niveau du monstre (1, 2 ou 3)
     int pv;          // Points de vie du monstre
     int damage;       // Points de dégâts infligés par attaque
-    char weapons[5];          // Liste des armes disponibles ('P', 'F', 'C', 'O', '#')
     int nbWeapons;            // Nombre d'armes disponibles
+    char *weapons;          // Liste des armes disponibles ('P', 'F', 'C', 'O', '#')
 } Monster;
 
 typedef struct {
@@ -33,6 +33,11 @@ typedef struct {
     int nbMonsters;         // Nombre de monstres dans le groupe
     int type;               // Type du groupe : 1 pour séquentiel, 2 pour simultané
 } MonstersGroup;
+
+typedef struct {
+    Player *players;  // Tableau dynamique de joueurs
+    int nbPlayers;    // Nombre total de joueurs
+} Leaderboard;
 
 Heap heapEmpty(void);
 Heap add(Heap f, int x);
@@ -44,9 +49,16 @@ int length(Heap f);
 
 void global(void);
 void clearScreen(void);
-void existingGameDisplay(Player *playersTab, int nbPlayers);
+void existingGameDisplay(Player **playersTab, int *nbPlayers);
 void game(void);
 void createNewGameDisplay();
-Player *loadData(int *nbPlayers);
+Player *loadPlayers(int *nbPlayers);
 char determineWinner(char weaponPlayer, char weaponMonster);
 int dichotomousSearch(char playerName[50], Player playersTab[100], int nbPlayers, int *trouve);
+Monster* loadMonsters(char *filename, int *nbMonsters);
+//void showEveryMonsters(Monster *monsters, int nbMonsters);
+
+Player* loadPlayersFromBinary(char *filename, int *nbPlayers);
+void savePlayersToBinary(char *filename, Player *players, int nbPlayers);
+
+//void showEveryPlayers(Player *players, int nbPlayers);

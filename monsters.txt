@@ -1,0 +1,6 @@
+5
+Chouin-Chouin,1,4,1
+Dragonus,3,6,2
+Petite Pustule,2,6,1
+Lutin Cordial,2,6,1
+Chimère,3,6,2
