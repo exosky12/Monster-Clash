@@ -2,7 +2,7 @@
 
 Devoir jeu en C
 
-## Description  ```monsters.dat```
+## Description  ```monsters.txt```
 
 ```
 5
@@ -13,7 +13,7 @@ LutinCordial,2,6,1
 Chimere,3,6,2
 ```
 
-Ici le fichier ```monsters.dat``` suis le format suivant:
+Ici le fichier ```monsters.txt``` suis le format suivant:
 
 ```
 <nombre de monstres>
