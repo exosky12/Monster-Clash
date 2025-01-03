@@ -240,16 +240,6 @@ char determineWinner(char weaponPlayer, char weaponMonster)
     return 'D';
 }
 
-Player *loadPlayers(int *nbPlayers)
-{
-    Player *playersTab;
-
-    // charger nbPlayers
-
-    playersTab = (Player*)malloc(*nbPlayers * sizeof(Player));
-    return playersTab;
-}
-
 Monster* loadMonsters(char *filename, int *nbMonsters) 
 {
     FILE *file = fopen(filename, "r");
@@ -503,10 +493,7 @@ void savePlayersToBinary(char *filename, Player *players, int nbPlayers)
     fclose(file);
 }
 
-/*
-//Fonction de test pour afficher les joueurs chargés
-
-void showEveryPlayers(Player *players, int nbPlayers)
+void showPlayers(Player *players, int nbPlayers)
 {
     for (int i = 0; i < nbPlayers; i++)
     {
@@ -521,7 +508,56 @@ void showEveryPlayers(Player *players, int nbPlayers)
         printf("Armes : %s\n\n", players[i].weapons);
     }
 }
-*/
+
+void switchPlayers(Player *playersTab[], int i, int j)
+{
+    Player *temp = playersTab[i];
+    playersTab[i] = playersTab[j];
+    playersTab[j] = temp;
+}
+
+void sortPlayers(Player *playersTab[], int nbPlayers, char sortType)
+{
+  if (sortType == 'N')
+  {
+    for (int i = 0; i < nbPlayers - 1; i++)
+    {
+      for (int j = i + 1; j < nbPlayers; j++)
+      {
+        if (strcmp(playersTab[i]->nickname, playersTab[j]->nickname) > 0)
+        {
+          switchPlayers(playersTab, i, j);
+        }
+      }
+    }
+  }
+  else if (sortType == 'S')
+  {
+    while (nbPlayers > 1)
+    {
+        int max = biggestScore(playersTab, nbPlayers);
+        switchPlayers(playersTab, max, nbPlayers - 1);
+        nbPlayers--;
+    }
+  }
+  else
+  {
+    printf("Type de tri invalide\n");
+  }
+}
+
+int biggestScore(Player *PlayersTab[], int nbPlayers)
+{
+    int max = 0;
+    for (int i = 1; i < nbPlayers; i++)
+    {
+        if (PlayersTab[i]->scores > PlayersTab[max]->scores)
+        {
+            max = i;
+        }
+    }
+    return max;
+}
 
 void global(void)
 {
@@ -541,7 +577,7 @@ void global(void)
         printf("[9] Quitter et sauvegarder\n\n");
         printf("Votre choix > ");
         //showEveryMonsters(monsters, nbMonsters);
-        //showEveryPlayers(playerTab, nbPlayers);
+        //showPlayers(playerTab, nbPlayers);
         //printf("Nombre de joueurs : %d\n", nbPlayers);
         scanf(" %d", &choice);
         switch (choice)
@@ -553,10 +589,12 @@ void global(void)
             createNewGameDisplay();
             break;
         case 3:
-            printf("Afficher la liste des joueurs triée par nom\n");
+            sortPlayers(&playerTab, nbPlayers, 'N');
+            showPlayers(playerTab, nbPlayers);
             break;
         case 4:
-            printf("Afficher la liste des joueurs triée par meilleur score\n");
+            sortPlayers(&playerTab, nbPlayers, 'S');
+            showPlayers(playerTab, nbPlayers);
             break;
         case 9:
             printf("Au revoir...\n");

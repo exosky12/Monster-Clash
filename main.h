@@ -52,7 +52,6 @@ void clearScreen(void);
 void existingGameDisplay(Player **playersTab, int *nbPlayers);
 void game(void);
 void createNewGameDisplay();
-Player *loadPlayers(int *nbPlayers);
 char determineWinner(char weaponPlayer, char weaponMonster);
 int dichotomousSearch(char playerName[50], Player playersTab[100], int nbPlayers, int *trouve);
 Monster* loadMonsters(char *filename, int *nbMonsters);
@@ -61,4 +60,7 @@ Monster* loadMonsters(char *filename, int *nbMonsters);
 Player* loadPlayersFromBinary(char *filename, int *nbPlayers);
 void savePlayersToBinary(char *filename, Player *players, int nbPlayers);
 
-//void showEveryPlayers(Player *players, int nbPlayers);
+void showPlayers(Player *players, int nbPlayers);
+void sortPlayers(Player *playersTab[], int nbPlayers, char sortType);
+void switchPlayers(Player *playersTab[], int i, int j);
+int biggestScore(Player *PlayersTab[], int nbPlayers);
