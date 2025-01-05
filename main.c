@@ -94,59 +94,100 @@ int length(Heap f)
     return i;
 }
 
-void existingGameDisplay(Player **playersTab, int *nbPlayers)
+void existingGameDisplay(Player **playersTab, int *nbPlayers, char *filename, Monster monstersTab[100], int nbMonstersGroup)
 {
-    //
-    // Ici beaucoup en commentaire car c'était pour tester si l'ajout et la sauvegarde de nouveau fonctionnait
-    //
-
-    // FILE *gameHeap;
-    char playerName[100];
-    int trouve, index;
     clearScreen();
     printf("▁ ▂ ▄ ▅ ▆ ▇ █ Jouer une partie prédéfinie █ ▇ ▆ ▅ ▄ ▂ ▁\n\n");
-    // printf("Entrer le nom du fichier correspondant à la partie > ");
-    // scanf("%s", gameName);
-    // gameHeap = fopen(gameName, "rb");
-    // if (gameHeap == NULL)
-    //{
-    //     printf("[ERREUR] Fichier introuvable\n");
-    //     return;
-    // }
-    printf("Enter le pseudo du joueur > ");
-    scanf("%s", playerName);
-    // vérifier si le joueur est dans la liste des joueurs
-    index = dichotomousSearch(playerName, *playersTab, *nbPlayers, &trouve);
-    if (trouve == 0)
+
+    // Charger les joueurs à partir du fichier binaire
+    Player *loadedPlayers = loadPlayersFromBinary(filename, nbPlayers);
+
+    if (loadedPlayers == NULL)
     {
-        // charger les données du joueur
-        Player player;
-        strcpy(player.nickname, playerName);
-
-        int nbPv;
-        printf("Entrer le nombre de points de vie de votre joueur > ");
-        scanf("%*c %d%*c", &nbPv);
-
-        player.nbPv = nbPv;
-        player.nbDamages = 0;
-        player.nbGames = 0;
-        player.scores = NULL;
-        strcpy(player.weapons, "PFC");
-
-        // realloc playersTab
-        *nbPlayers = *nbPlayers + 1;
-        *playersTab = (Player *)realloc(*playersTab, (*nbPlayers) * sizeof(Player));
-        if (playersTab == NULL)
-        {
-            printf("Erreur d'allocation mémoire\n");
-            return;
-        }
-
-        (*playersTab)[*nbPlayers - 1] = player;
+        printf("[INFO] Aucun joueur n'a été chargé ou le fichier est inexistant.\n");
+        return;
     }
 
-    // game();
-}
+    // Mettre à jour le tableau dynamique des joueurs
+    *playersTab = loadedPlayers;
+
+    // Demander le pseudo du joueur
+    char playerName[100];
+    printf("Entrez le pseudo du joueur > ");
+    scanf("%s", playerName);
+
+    // Recherche du joueur dans le tableau
+    int trouve;
+    int index = dichotomousSearch(playerName, *playersTab, *nbPlayers, &trouve);
+
+    if (trouve == 0)
+    {
+        printf("Joueur non trouvé\n");
+        return;
+    }
+    // Le joueur a été trouvé, on charge ses données à partir du fichier
+    FILE *file = fopen(filename, "rb");
+    if (file == NULL)
+    {
+        printf("Erreur : impossible d'ouvrir le fichier binaire pour charger les données.\n");
+        return;
+    }
+    // Lecture des joueurs dans le fichier
+    Player ExistingPlayer;
+    int playerFound = 0;
+
+    // Lire le nombre de joueurs
+    int numPlayers;
+    fread(&numPlayers, sizeof(int), 1, file);
+        
+        // Recherche du joueur dans le fichier
+        for (int i = 0; i < numPlayers; i++) {
+            // Lire le pseudo du joueur
+            fread(ExistingPlayer.nickname, sizeof(char), 50, file);
+        
+            // Si le pseudo correspond, on charge ses données
+            if (strcmp(ExistingPlayer.nickname, playerName) == 0) {
+                fread(&ExistingPlayer.nbPv, sizeof(int), 1, file);
+                fread(&ExistingPlayer.nbDamages, sizeof(int), 1, file);
+                fread(&ExistingPlayer.nbGames, sizeof(int), 1, file);
+        
+                // Allouer de la mémoire pour les scores
+                ExistingPlayer.scores = malloc(ExistingPlayer.nbGames * sizeof(int));
+                if (ExistingPlayer.scores == NULL) {
+                    printf("Erreur lors de l'allocation de mémoire pour les scores\n");
+                    fclose(file);
+                    return;
+                }
+        
+                for (int j = 0; j < ExistingPlayer.nbGames; j++) {
+                    fread(&ExistingPlayer.scores[j], sizeof(int), 1, file);
+                }
+        
+                // Lecture des armes
+                fread(ExistingPlayer.weapons, sizeof(char), 5, file);
+        
+                playerFound = 1;
+                break;
+            }
+        }
+        
+        // Fermer le fichier en dehors de la boucle
+        fclose(file);
+        
+        if (playerFound) {
+            Player player = ExistingPlayer;
+            showPlayers(*playersTab, *nbPlayers);
+            // lancer une partie prédéfinie
+            printf("\nDémarrage de la partie pour le joueur %s...\n", player.nickname);
+            game(player, *playersTab, monstersTab, nbMonstersGroup);
+        
+            // Libérer la mémoire allouée pour les scores
+            free(ExistingPlayer.scores);
+        }
+    }
+
+
+
 
 int dichotomousSearch(char playerName[50], Player playersTab[100], int nbPlayers, int *trouve)
 {
@@ -317,6 +358,7 @@ void game(Player player, Player playersTab[100], Monster monstersTab[100], int n
                 return;
             }
             printf("\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n", player.nickname, player.nbPv, group2.monsters[currentMonsterIndex].name, group2.monsters[currentMonsterIndex].pv);
+            global();
             break;
         }
         case 'D':
@@ -360,7 +402,7 @@ void createNewGameDisplay(int *nbPlayers, Player **playersTab, Monster monstersT
         (*playersTab)[*nbPlayers - 1] = player;
     }
     Player player = *playersTab[index];
-    game(player, playersTab, monstersTab, nbMonstersGroup);
+    game(player, *playersTab, monstersTab, nbMonstersGroup);
 }
 
 char determineWinner(char weaponPlayer, char weaponMonster)
@@ -754,7 +796,7 @@ void global(void)
         switch (choice)
         {
         case 1:
-            existingGameDisplay(&playerTab, &nbPlayers);
+            existingGameDisplay(&playerTab, &nbPlayers, "game.dat", monsters, nbMonsters);
             break;
         case 2:
             createNewGameDisplay(&nbPlayers, &playerTab, monsters, nbMonsters);
@@ -786,3 +828,4 @@ void clearScreen(void)
         printf("\n");
     }
 }
+
