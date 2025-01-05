@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define RED "\033[31m"
+#define RESET "\033[0m"
+#define YELLOW "\033[33m"
+#define CYAN "\033[36m"
+#define GREEN "\033[32m"
+#define BOLD "\033[1m"
+#define MAGENTA "\033[35m"
+
 typedef enum
 {
     False,
@@ -57,7 +65,7 @@ int length(Heap f);
 
 void global(void);
 void clearScreen(void);
-void existingGameDisplay(Player **playersTab, int *nbPlayers,char *filename ,Monster monstersTab[100], int nbMonstersGroup);
+void existingGameDisplay(Player **playersTab, int *nbPlayers, char *filename, Monster monstersTab[100], int nbMonstersGroup);
 void game(Player player, Player playersTab[100], Monster monstersTab[100], int nbMonstersGroup);
 void createNewGameDisplay(int *nbPlayers, Player **playersTab, Monster monstersTab[100], int nbMonstersGroup);
 char determineWinner(char weaponPlayer, char weaponMonster);
