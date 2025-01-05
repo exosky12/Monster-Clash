@@ -65,7 +65,7 @@ int length(Heap f);
 
 void global(void);
 void clearScreen(void);
-void existingGameDisplay(Player **playersTab, int *nbPlayers, char *filename, Monster monstersTab[100], int nbMonstersGroup);
+void existingGameDisplay(Player **playersTab, int *nbPlayers, Monster monstersTab[100], int nbMonstersGroup);
 void game(Player player, Player playersTab[100], Monster monstersTab[100], int nbMonstersGroup);
 void createNewGameDisplay(int *nbPlayers, Player **playersTab, Monster monstersTab[100], int nbMonstersGroup);
 char determineWinner(char weaponPlayer, char weaponMonster);
