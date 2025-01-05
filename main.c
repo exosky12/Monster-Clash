@@ -162,6 +162,30 @@ void existingGameDisplay(Player **playersTab, int *nbPlayers, Monster monstersTa
     free(player.scores);
 }
 
+int dichotomousSearch(char playerName[50], Player playersTab[100], int nbPlayers, int *trouve)
+{
+    int start = 0, end = nbPlayers - 1;
+    int m;
+    while (start <= end)
+    {
+        m = (start + end) / 2;
+        if (strcmp(playerName, playersTab[m].nickname) == 0)
+        {
+            *trouve = 1;
+            return m;
+        }
+        if (strcmp(playerName, playersTab[m].nickname) < 0)
+        {
+            end = m - 1;
+        }
+        else
+        {
+            start = m + 1;
+        }
+    }
+    *trouve = 0;
+    return start;
+}
 
 // Ajouter type de retour et paramètres
 void game(Player player, Player playersTab[100], Monster monstersTab[100], int nbMonstersGroup)
