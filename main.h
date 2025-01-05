@@ -38,16 +38,10 @@ typedef struct
     int level;     // Niveau du monstre (1, 2 ou 3)
     int pv;        // Points de vie du monstre
     int damage;    // Points de dégâts infligés par attaque
+    int type;          // Type du groupe : 1 pour séquentiel, 2 pour simultané
     int nbWeapons; // Nombre d'armes disponibles
     char *weapons; // Liste des armes disponibles ('P', 'F', 'C', 'O', '#')
 } Monster;
-
-typedef struct
-{
-    Monster *monsters; // Tableau dynamique de monstres
-    int nbMonsters;    // Nombre de monstres dans le groupe
-    int type;          // Type du groupe : 1 pour séquentiel, 2 pour simultané
-} MonstersGroup;
 
 typedef struct
 {
@@ -66,11 +60,11 @@ int length(Heap f);
 void global(void);
 void clearScreen(void);
 void existingGameDisplay(Player **playersTab, int *nbPlayers, Monster monstersTab[100], int nbMonstersGroup);
-void game(Player player, Player playersTab[100], Monster monstersTab[100], int nbMonstersGroup);
+void game(Player player, Player playersTab[100], Monster monstersTab[100], int nbMonstersGroup1, int nbMonstersGroup2);
 void createNewGameDisplay(int *nbPlayers, Player **playersTab, Monster monstersTab[100], int nbMonstersGroup);
 char determineWinner(char weaponPlayer, char weaponMonster);
 int dichotomousSearch(char playerName[50], Player playersTab[100], int nbPlayers, int *trouve);
-Monster *loadMonsters(char *filename, int *nbMonsters);
+Monster *loadMonsters(char *filename, int *nbMonsters, int *indexMonstersGroup1, int *indexMonstersGroup2);
 // void showEveryMonsters(Monster *monsters, int nbMonsters);
 
 Player *loadPlayersFromBinary(char *filename, int *nbPlayers);

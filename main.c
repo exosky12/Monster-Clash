@@ -94,7 +94,7 @@ int length(Heap f)
     return i;
 }
 
-void existingGameDisplay(Player **playersTab, int *nbPlayers, Monster monstersTab[100], int nbMonstersGroup)
+void existingGameDisplay(Player **playersTab, int *nbPlayers, Monster monstersTab[], int nbMonstersGroup1)
 {
     clearScreen();
     printf(BOLD GREEN "▁ ▂ ▄ ▅ ▆ ▇ █ Jouer une partie prédéfinie █ ▇ ▆ ▅ ▄ ▂ ▁\n\n" RESET);
@@ -156,13 +156,13 @@ void existingGameDisplay(Player **playersTab, int *nbPlayers, Monster monstersTa
     Player player = (*playersTab)[index];
     showPlayers(*playersTab, *nbPlayers);
     printf("\nDémarrage de la partie pour le joueur %s...\n", playerName);
-    game(player, *playersTab, monstersTab, nbMonstersGroup);
+    game(player, *playersTab, monstersTab, nbMonstersGroup1);
 
     // Libérer la mémoire allouée pour les scores
     free(player.scores);
 }
 
-int dichotomousSearch(char playerName[50], Player playersTab[100], int nbPlayers, int *trouve)
+int dichotomousSearch(char playerName[50], Player playersTab[], int nbPlayers, int *trouve)
 {
     int start = 0, end = nbPlayers - 1;
     int m;
@@ -188,13 +188,13 @@ int dichotomousSearch(char playerName[50], Player playersTab[100], int nbPlayers
 }
 
 // Ajouter type de retour et paramètres
-void game(Player player, Player playersTab[100], Monster monstersTab[100], int nbMonstersGroup)
+void game(Player player, Player playersTab[], Monster monstersTab[], int nbMonstersGroup1, int nbMonstersGrpup2)
 {
     printf("\n[CONTEXTE] Vous arrivez dans un corridor, bordé par deux falaises des monstres arrivent les uns après les autres.\n\n");
     int counterGroup1 = 0;
     Monster currentMonsterGroup1 = monstersTab[counterGroup1];
     int playerPoints = 0;
-    while (nbMonstersGroup > 0)
+    while (nbMonstersGroup1 > 0)
     {
         int currentMonsterGroup1Pv = monstersTab[counterGroup1].pv;
         char currentMonsterGroup1Name[50];
@@ -265,26 +265,22 @@ void game(Player player, Player playersTab[100], Monster monstersTab[100], int n
             }
             }
         }
-        nbMonstersGroup--;
+        nbMonstersGroup1--;
         counterGroup1++;
     }
     printf(CYAN "[INFO] Tous les monstres sont morts...\n\n" RESET);
     printf("[CONTEXTE] vous arrivez au bout du corridor, une plaine herbeuse apparaît. Malheureusement des monstres sortent de partout pour tous vous attaquer en même temps ou presque...\n\n");
-    MonstersGroup group2;
-    group2.monsters = monstersTab;
-    group2.nbMonsters = nbMonstersGroup;
-    group2.type = 2;
     Heap heap = heapEmpty();
-    for (int i = 0; i < group2.nbMonsters; i++)
+    for (int i = 0; i < nbMonstersGrpup2; i++)
     {
         heap = add(heap, i);
     }
     while (length(heap) > 0)
     {
         int currentMonsterIndex = head(heap);
-        printf(CYAN "[INFO] Le monstre %s(%dptV, %dAtt) s'avance pour vous attaquer %s(%dptV, %dAtt)\n" RESET, group2.monsters[currentMonsterIndex].name, group2.monsters[currentMonsterIndex].pv, group2.monsters[currentMonsterIndex].damage, player.nickname, player.nbPv, player.nbDamages);
+        printf(CYAN "[INFO] Le monstre %s(%dptV, %dAtt) s'avance pour vous attaquer %s(%dptV, %dAtt)\n" RESET, monstersTab[currentMonsterIndex].name, monstersTab[currentMonsterIndex].pv, monstersTab[currentMonsterIndex].damage, player.nickname, player.nbPv, player.nbDamages);
         int nbWeapons = strlen(player.weapons);
-        printf("[ACTION] %s(%dPts) choisis ton arme parmi", player.nickname, playerPoints);
+        printf(YELLOW "[ACTION] %s(%dPts) choisis ton arme parmi" RESET, player.nickname, playerPoints);
         for (int i = 0; i < nbWeapons; i++)
         {
             printf(" %c", player.weapons[i]);
@@ -294,10 +290,10 @@ void game(Player player, Player playersTab[100], Monster monstersTab[100], int n
         char weaponChoosen;
         scanf(" %c", &weaponChoosen);
 
-        int monsterWeaponIndex = rand() % group2.monsters[currentMonsterIndex].nbWeapons;
-        char monsterWeapon = group2.monsters[currentMonsterIndex].weapons[monsterWeaponIndex];
+        int monsterWeaponIndex = rand() % monstersTab[currentMonsterIndex].nbWeapons;
+        char monsterWeapon = monstersTab[currentMonsterIndex].weapons[monsterWeaponIndex];
 
-        printf(CYAN "[ℹ️  INFO] %s(%c) attaque %s(%c)\n" RESET, player.nickname, weaponChoosen, group2.monsters[currentMonsterIndex].name, monsterWeapon);
+        printf(CYAN "[INFO] %s(%c) attaque %s(%c)\n" RESET, player.nickname, weaponChoosen, monstersTab[currentMonsterIndex].name, monsterWeapon);
 
         char winner = determineWinner(weaponChoosen, monsterWeapon);
 
@@ -305,46 +301,46 @@ void game(Player player, Player playersTab[100], Monster monstersTab[100], int n
         {
         case 'P':
         {
-            group2.monsters[currentMonsterIndex].pv -= player.nbDamages;
+            monstersTab[currentMonsterIndex].pv -= player.nbDamages;
             int winningPoints = 10;
-            if (group2.monsters[currentMonsterIndex].pv <= 0)
+            if (monstersTab[currentMonsterIndex].pv <= 0)
             {
-                group2.monsters[currentMonsterIndex].pv = 0;
-                winningPoints = 50 * group2.monsters[currentMonsterIndex].level;
-                printf(GREEN "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n" RESET, player.nickname, player.nbPv, group2.monsters[currentMonsterIndex].name, group2.monsters[currentMonsterIndex].pv, winningPoints);
-                printf(CYAN "\t[INFO] %s meurt sous le coup de l'attaque\t\t+%dpts\n\n" RESET, group2.monsters[currentMonsterIndex].name, winningPoints);
+                monstersTab[currentMonsterIndex].pv = 0;
+                winningPoints = 50 * monstersTab[currentMonsterIndex].level;
+                printf(GREEN "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n" RESET, player.nickname, player.nbPv, monstersTab[currentMonsterIndex].name, monstersTab[currentMonsterIndex].pv, winningPoints);
+                printf(CYAN "\t[INFO] %s meurt sous le coup de l'attaque\t\t+%dpts\n\n" RESET, monstersTab[currentMonsterIndex].name, winningPoints);
             }
             else
             {
                 playerPoints += winningPoints;
-                printf(GREEN "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n" RESET, player.nickname, player.nbPv, group2.monsters[currentMonsterIndex].name, group2.monsters[currentMonsterIndex].pv, winningPoints);
+                printf(GREEN "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n" RESET, player.nickname, player.nbPv, monstersTab[currentMonsterIndex].name, monstersTab[currentMonsterIndex].pv, winningPoints);
             }
             break;
         }
         case 'M':
         {
-            player.nbPv -= group2.monsters[currentMonsterIndex].damage;
+            player.nbPv -= monstersTab[currentMonsterIndex].damage;
             if (player.nbPv <= 0)
             {
                 player.nbPv = 0;
-                printf(RED "\t[DEFAITE] %s(%dptV) perd l'attaque contre %s(%dptV)\n" RESET, player.nickname, player.nbPv, group2.monsters[currentMonsterIndex].name, group2.monsters[currentMonsterIndex].pv);
+                printf(RED "\t[DEFAITE] %s(%dptV) perd l'attaque contre %s(%dptV)\n" RESET, player.nickname, player.nbPv, monstersTab[currentMonsterIndex].name, monstersTab[currentMonsterIndex].pv);
                 printf(CYAN "[INFO] PERDU... Nombre de points acquis : %d\n" RESET, playerPoints);
                 return;
             }
-            printf(RED "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n" RESET, player.nickname, player.nbPv, group2.monsters[currentMonsterIndex].name, group2.monsters[currentMonsterIndex].pv);
+            printf(RED "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n" RESET, player.nickname, player.nbPv, monstersTab[currentMonsterIndex].name, monstersTab[currentMonsterIndex].pv);
             global();
             break;
         }
         case 'D':
         {
-            printf(MAGENTA "\t[EGALITE] Aucun de %s(%dptV) et %s(%dptV) ne gagne l'attaque\n" RESET, player.nickname, player.nbPv, group2.monsters[currentMonsterIndex].name, group2.monsters[currentMonsterIndex].pv);
+            printf(MAGENTA "\t[EGALITE] Aucun de %s(%dptV) et %s(%dptV) ne gagne l'attaque\n" RESET, player.nickname, player.nbPv, monstersTab[currentMonsterIndex].name, monstersTab[currentMonsterIndex].pv);
             break;
         }
         }
     }
 }
 
-void createNewGameDisplay(int *nbPlayers, Player **playersTab, Monster monstersTab[100], int nbMonstersGroup)
+void createNewGameDisplay(int *nbPlayers, Player **playersTab, Monster monstersTab[], int nbMonstersGroup1, int nbMonstersGroup2)
 {
     char playerName[50];
     clearScreen();
@@ -374,9 +370,12 @@ void createNewGameDisplay(int *nbPlayers, Player **playersTab, Monster monstersT
         }
 
         (*playersTab)[*nbPlayers - 1] = player;
+        game((*playersTab)[*nbPlayers - 1], *playersTab, monstersTab, nbMonstersGroup1, nbMonstersGroup2);
     }
-    Player player = *playersTab[index];
-    game(player, *playersTab, monstersTab, nbMonstersGroup);
+    else
+    {
+        game((*playersTab)[index], *playersTab, monstersTab, nbMonstersGroup1, nbMonstersGroup2);
+    }
 }
 
 char determineWinner(char weaponPlayer, char weaponMonster)
@@ -428,7 +427,7 @@ char determineWinner(char weaponPlayer, char weaponMonster)
     return 'D';
 }
 
-Monster *loadMonsters(char *filename, int *nbMonsters)
+Monster *loadMonsters(char *filename, int *nbMonsters, int *indexMonstersGroup1, int *indexMonstersGroup2)
 {
     FILE *file = fopen(filename, "r");
     if (file == NULL)
@@ -489,10 +488,11 @@ Monster *loadMonsters(char *filename, int *nbMonsters)
             return NULL;
         }
 
-        fscanf(file, "%d,%d,%d",
+        fscanf(file, "%d,%d,%d,%d",
                &monster->level,
                &monster->pv,
-               &monster->damage);
+               &monster->damage,
+               &monster->type);
 
         // Allocation dynamique pour les armes du monstre
         switch (monster->level)
@@ -519,6 +519,18 @@ Monster *loadMonsters(char *filename, int *nbMonsters)
             printf("Niveau de monstre invalide\n");
             fclose(file);
             return NULL;
+        }
+
+        switch (monster->type)
+        {
+        case 1:
+
+
+            break;
+        case 2:
+
+
+            break;
         }
     }
     fclose(file);
@@ -749,9 +761,10 @@ int biggestScore(Player *PlayersTab[], int nbPlayers)
 void global(void)
 {
     Boolean quit = False;
-    int choice, nbPlayers, nbMonsters;
+    int choice, nbPlayers, nbMonsters, *indexMonstersGroup1, *indexMonstersGroup2;
     Player *playerTab = loadPlayersFromBinary("game.dat", &nbPlayers);
-    Monster *monsters = loadMonsters("monsters.txt", &nbMonsters);
+    Monster *monsters = loadMonsters("monsters.txt", &nbMonsters, indexMonstersGroup1, indexMonstersGroup2);
+
 
     while (!quit)
     {
@@ -764,12 +777,13 @@ void global(void)
         printf("[9] Quitter et sauvegarder\n\n");
         printf("Votre choix > ");
         // showEveryMonsters(monsters, nbMonsters);
+        showPlayers(playerTab, nbPlayers);
         // printf("Nombre de joueurs : %d\n", nbPlayers);
         scanf(" %d", &choice);
         switch (choice)
         {
         case 1:
-            existingGameDisplay(&playerTab, &nbPlayers,monsters, nbMonsters);
+            existingGameDisplay(&playerTab, &nbPlayers, monsters, nbMonsters);
             break;
         case 2:
             createNewGameDisplay(&nbPlayers, &playerTab, monsters, nbMonsters);
