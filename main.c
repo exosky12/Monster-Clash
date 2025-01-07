@@ -96,7 +96,7 @@ int longueur(File f)
     i++;
     return i;
 }
-
+/*
 void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTab[], int indexMonstresTabGroupe1[], int nbMonstresGroupe1)
 {
     clearScreen();
@@ -162,7 +162,7 @@ void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTab[]
 
     // Libérer la mémoire allouée pour les scores
     free(joueur.scores);
-}
+}*/
 
 int rechercheDicoJoueur(char pseudoJoueur[50], Joueur joueursTab[], int nbJoueurs, int *trouve)
 {
@@ -880,7 +880,7 @@ void global(void)
         switch (choice)
         {
         case 1:
-            existingGameDisplay(&joueursTab, &nbJoueurs, monstres, indexMonstresGroupe1, nbMonstres);
+            // existingGameDisplay(&joueursTab, &nbJoueurs, monstres, indexMonstresGroupe1, nbMonstres);
             break;
         case 2:
             createNewGameDisplay(&nbJoueurs, &joueursTab, monstres, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
