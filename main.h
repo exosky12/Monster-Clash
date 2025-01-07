@@ -19,7 +19,7 @@ typedef enum
 typedef struct Maillon
 {
     int v;
-    struct Maillon *suiv
+    struct Maillon *suiv;
 } Maillon, *File;
 
 typedef struct
@@ -60,20 +60,19 @@ int longueur(File f);
 void global(void);
 void clearScreen(void);
 // void existingGameDisplay(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTab[], int nbMonstresGroup1);
-void game(Joueur player, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTabGroup1[], int indexMonstresTabGroup2[], int nbMonstresGroup1, int nbMonstresGroup2);
-void createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroup1[], int indexMonstresTabGroup2[], int nbMonstresGroup1, int nbMonstresGroup2);
+void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres);
+
+void createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2);
 char determinerGagnant(char weaponJoueur, char weaponMonstre);
-int rechercheDico(char playerName[50], Joueur joueursTab[], int nbJoueurs, int *trouve);
+
+int rechercheDicoJoueur(char pseudoJoueur[50], Joueur joueursTab[], int nbJoueurs, int *trouve);
+int rechercheArme(char arme, char armes[], int nbArmes);
+
 Monstre *loadMonstres(char *filenom, int *nbMonstres, int *indexMonstresGroup1, int *indexMonstresGroup2, int *nbMonstresGroup1, int *nbMonstresGroup2);
 // void showEveryMonstres(Monstre *monstres, int nbMonstres);
 
 Joueur *loadJoueursFromBinary(char *filenom, int *nbJoueurs);
 void saveJoueursToBinary(char *filenom, Joueur *joueurs, int nbJoueurs);
 
-void showAllJoueurs(Joueur *joueurs, int nbJoueurs);
-void showAllbybiggestScoresRecursive(Joueur *JoueursTab[], int currentIndex, int maxIndex, int nbJoueurs);
-void showAllbybiggestScores(Joueur *JoueursTab[], int nbJoueurs);
 int biggestScore(Joueur * JoueursTab[], int nbJoueurs);
 int MinScore(Joueur *JoueursTab[], int nbJoueurs);
-
-void ShowJoueurPreciseStats(Joueur *JoueursTab[], int nbJoueurs);
