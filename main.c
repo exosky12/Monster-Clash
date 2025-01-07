@@ -850,6 +850,26 @@ int MinScore(Joueur *JoueursTab[], int nbJoueurs)
     return min;
 }
 
+/*
+void trieScoreJoueur(Joueur *JoueursTab[], int nbJoueurs)
+{
+    Joueur *JoueurTemp;
+    int i, j;
+    for (i = 0; i < nbJoueurs; i++)
+    {
+        for (j = i + 1; j < nbJoueurs; j++)
+        {
+            if (JoueursTab[i]->scores < JoueursTab[j]->scores)
+            {
+                JoueurTemp = JoueursTab[i];
+                JoueursTab[i] = JoueursTab[j];
+                JoueursTab[j] = JoueurTemp;
+            }
+        }
+    }
+}
+*/
+
 void global(void)
 {
     Boolean quit = False;
