@@ -95,8 +95,8 @@ int longueur(File f)
     return i;
 }
 
-/*
-void existingGameDisplay(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTab[],  , int nbMonstresGroupe1)
+
+void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTab[], int indexMonstresTabGroupe1[]  , int nbMonstresGroupe1)
 {
     clearScreen();
     printf(GRAS VERT "▁ ▂ ▄ ▅ ▆ ▇ █ Jouer une partie prédéfinie █ ▇ ▆ ▅ ▄ ▂ ▁\n\n" RESET);
@@ -130,7 +130,7 @@ void existingGameDisplay(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTa
 
     // Recherche du joueur dans le tableau
     int trouve;
-    int index = rechercheDico(pseudoJoueur, *joueursTab, *nbJoueurs, &trouve);
+    int index = rechercheDicoJoueur(pseudoJoueur, *joueursTab, *nbJoueurs, &trouve);
 
     if (trouve == 0)
     {
@@ -156,14 +156,13 @@ void existingGameDisplay(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTa
     }
 
     Joueur joueur = (*joueursTab)[index];
-    showAllJoueurs(*joueursTab, *nbJoueurs);
     printf("\nDémarrage de la partie pour le joueur %s...\n", pseudoJoueur);
-    game(joueur, *joueursTab, monstresTab, nbMonstresGroupe1);
+    gameGroupe1(joueur, *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1);
 
     // Libérer la mémoire allouée pour les scores
     free(joueur.scores);
 }
-*/
+
 
 int rechercheDicoJoueur(char pseudoJoueur[50], Joueur joueursTab[], int nbJoueurs, int *trouve)
 {
@@ -881,7 +880,7 @@ void global(void)
         switch (choice)
         {
         case 1:
-            // existingGameDisplay(&joueursTab, &nbJoueurs, monstres, nbMonstres);
+            existingGameDisplay(&joueursTab, &nbJoueurs, monstres, indexMonstresGroupe1 ,nbMonstres);
             break;
         case 2:
             createNewGameDisplay(&nbJoueurs, &joueursTab, monstres, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
