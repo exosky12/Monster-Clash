@@ -35,5 +35,9 @@ Le format ce présente comme suit:
 
 ## Reste à faire
 
-- Fonction combat à travers les niveaux
+- Partie prédéfinie
 - Fonction d'affichage des statistiques des joueurs (trié par nom/score)
+- Quand la win --> rien
+- Check points
+- Niveau sur le joueur (optionnel)
+- Saisie controlée (surtout le global, et un peu le reste)
