@@ -116,7 +116,7 @@ void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTab[]
 
     if (loadedJoueurs == NULL)
     {
-        printf(BLEU "[ℹ️  INFO] Aucun joueur n'a été chargé ou le fichier est inexistant.\n" RESET);
+        printf(BLEU "Aucun joueur n'a été chargé ou le fichier est inexistant.\n" RESET);
         return;
     }
 
