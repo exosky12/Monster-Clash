@@ -572,7 +572,7 @@ Monstre *loadMonstres(char *filenom, int *nbMonstres, int **indexMonstresGroupe1
     }
 
     // Allocation dynamique pour le tableau des monstres
-    Monstre *monstres = malloc(*nbMonstres * sizeof(Monstre));
+    Monstre *monstres = (Monstre *)malloc(*nbMonstres * sizeof(Monstre));
     if (monstres == NULL)
     {
         printf("Erreur d'allocation mémoire\n");
@@ -744,7 +744,7 @@ Joueur *loadJoueursFromBinary(char *filenom, int *nbJoueurs)
     }
 
     // Allocation dynamique pour le tableau des joueurs
-    Joueur *joueurs = malloc(*nbJoueurs * sizeof(Joueur));
+    Joueur *joueurs = (Joueur *)malloc(*nbJoueurs * sizeof(Joueur));
     if (joueurs == NULL)
     {
         printf("Erreur d'allocation mémoire\n");
