@@ -219,7 +219,7 @@ void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
         // Monstre actuel
         Monstre monstreActuel = monstresTab[indexMonstresTab[index]];
 
-        printf(BLEU "[INFO] Le monstre %s(%dptV, %dAtt) accoure et se prépare à t'attaquer %s(%dptV, %dAtt)\n\n" RESET,
+        printf(BLEU "[INFO] Le monstre %s(%dptV, %dAtt) accoure et se prépare à t'attaquer %s(%dptV, %dAtt)\n" RESET,
                monstreActuel.nom, monstreActuel.pv, monstreActuel.degats, joueur.pseudo, joueur.nbPv, joueur.nbDegats);
 
         while (monstreActuel.pv > 0)
@@ -333,7 +333,6 @@ void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
     }
 }
 
-/*
 void gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres)
 {
     printf(BLEU "[INFO] Tous les monstres sont morts...\n\n" RESET);
@@ -341,11 +340,6 @@ void gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
 
     // Création de la file des monstres du groupe 2
     File file = fileVide();
-
-
-    // index qui permet de parcourir les monstres
-    int index = 0;
-
     // Ajout des monstres du groupe 2 dans la file
     for (int i = 0; i < nbMonstres; i++)
     {
@@ -363,8 +357,8 @@ void gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
 
         Monstre monstreActuel = monstresTab[indexMonstresTab[monstreActuelIndex]];
 
-        printf(BLEU "[INFO] Le monstre %s(%dptV, %dAtt) s'avance pour vous attaquer %s(%dptV, %dAtt)\n" RESET,
-        monstreActuel.nom, monstreActuel.pv, monstreActuel.degats, joueur.pseudo, joueur.nbPv, joueur.nbDegats);
+        printf(BLEU "[INFO] Le monstre %s(%dptV, %dAtt) s'avance pour vous attaquer %s(%dptV, %dAtt)\n\n" RESET,
+               monstreActuel.nom, monstreActuel.pv, monstreActuel.degats, joueur.pseudo, joueur.nbPv, joueur.nbDegats);
 
         // Nombre d'arme du joueur
         int nbArmes = strlen(joueur.armes);
@@ -388,7 +382,7 @@ void gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
 
         // Arme du monstre
         char armeMonstre = monstreActuel.armes[indexArmeMonstre];
-        printf(BLEU "[INFO] %s(%c) attaque %s(%c)\n" RESET, joueur.pseudo, armeChoisie, monstreActuel.nom , armeMonstre);
+        printf(BLEU "[INFO] %s(%c) attaque %s(%c)\n\n" RESET, joueur.pseudo, armeChoisie, monstreActuel.nom, armeMonstre);
 
         // Détermination du gagnant
         char gagnant = determinerGagnant(armeChoisie, armeMonstre);
@@ -417,22 +411,21 @@ void gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
 
                 // Si le monstre est mort, on le retire de la file
                 file = supprimerTete(file);
-                printf(VERT "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv, pointsGagnees);
-                printf(BLEU "\t[INFO] %s meurt sous le coup de l'attaque\t\t+%dpts\n\n" RESET,monstreActuel.nom, pointsGagnees);
-                }
+                printf(VERT "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv, pointsGagnees);
+                printf(BLEU "\t[INFO] %s meurt sous le coup de l'attaque\t\t+%dpts\n\n" RESET, monstreActuel.nom, pointsGagnees);
+            }
 
-                // Si le monstre n'est pas mort
+            // Si le monstre n'est pas mort
             else
             {
                 // Ajout des points gagnés par le joueur
                 pointsJoueur += pointsGagnees;
-                printf(VERT "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv, pointsGagnees);
-
+                printf(VERT "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv, pointsGagnees);
             }
             break;
         }
 
-        // Si le monstre gagne
+            // Si le monstre gagne
 
         case 'M':
         {
@@ -443,21 +436,21 @@ void gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
             if (joueur.nbPv <= 0)
             {
 
-            // On met les points de vie du joueur à 0
-            joueur.nbPv = 0;
-            printf(ROUGE "\t[DEFAITE] %s(%dptV) perd l'attaque contre %s(%dptV)\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
-            printf(BLEU "[INFO] PERDU... Nombre de points acquis : %d\n" RESET, pointsJoueur);
-            return;
+                // On met les points de vie du joueur à 0
+                joueur.nbPv = 0;
+                printf(ROUGE "\t[DEFAITE] %s(%dptV) perd l'attaque contre %s(%dptV)\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
+                printf(BLEU "[INFO] PERDU... Nombre de points acquis : %d\n\n" RESET, pointsJoueur);
+                return;
             }
 
-            printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
+            printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
             break;
         }
 
         // Si égalité
         case 'E':
         {
-            printf(MAGENTA "\t[EGALITE] Aucun de %s(%dptV) et %s(%dptV) ne gagne l'attaque\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
+            printf(MAGENTA "\t[EGALITE] Aucun de %s(%dptV) et %s(%dptV) ne gagne l'attaque\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
             break;
         }
         }
@@ -470,7 +463,6 @@ void gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
         }
     }
 }
-*/
 
 void createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2)
 {
@@ -503,10 +495,12 @@ void createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresT
 
         (*joueursTab)[*nbJoueurs - 1] = joueur;
         gameGroupe1((*joueursTab)[*nbJoueurs - 1], *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1);
+        gameGroupe2((*joueursTab)[*nbJoueurs - 1], *joueursTab, monstresTab, indexMonstresTabGroupe2, nbMonstresGroupe2);
     }
     else
     {
         gameGroupe1((*joueursTab)[index], *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1);
+        gameGroupe2((*joueursTab)[index], *joueursTab, monstresTab, indexMonstresTabGroupe2, nbMonstresGroupe2);
     }
 }
 
