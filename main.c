@@ -219,8 +219,8 @@ void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
         // Monstre actuel
         Monstre monstreActuel = monstresTab[indexMonstresTab[index]];
 
-        printf(BLEU "[INFO] Le monstre %s(%dptV, %dAtt) accoure et se prépare à t'attaquer %s(%dptV, %dAtt)\n\n" RESET, 
-        monstreActuel.nom, monstreActuel.pv, monstreActuel.degats, joueur.pseudo, joueur.nbPv, joueur.nbDegats);
+        printf(BLEU "[INFO] Le monstre %s(%dptV, %dAtt) accoure et se prépare à t'attaquer %s(%dptV, %dAtt)\n\n" RESET,
+               monstreActuel.nom, monstreActuel.pv, monstreActuel.degats, joueur.pseudo, joueur.nbPv, joueur.nbDegats);
 
         while (monstreActuel.pv > 0)
         {
@@ -234,11 +234,11 @@ void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
             // Recherche de l'arme choisie dans les armes disponibles
             int trouve = 0;
 
-            while(trouve==0)
+            while (trouve == 0)
             {
                 trouve = rechercheArme(armeChoisie, joueur.armes, 4);
 
-                if(trouve==0)
+                if (trouve == 0)
                 {
                     printf(ROUGE "[ERREUR] Arme invalide, veuillez choisir une arme parmi %s\n" RESET, joueur.armes);
                     printf("> ");
@@ -251,8 +251,7 @@ void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
             // Arme du monstre
             char armeMonstre = monstreActuel.armes[indexArmeMonstre];
 
-            printf(BLEU "[INFO] %s(%c) attaque %s(%c)\n\n" RESET, joueur.pseudo, armeChoisie, monstreActuel.nom , armeMonstre);
-
+            printf(BLEU "[INFO] %s(%c) attaque %s(%c)\n\n" RESET, joueur.pseudo, armeChoisie, monstreActuel.nom, armeMonstre);
 
             // Détermination du gagnant
             char gagnant = determinerGagnant(armeChoisie, armeMonstre);
@@ -278,11 +277,9 @@ void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
                     // Points gagnés par le joueur
                     pointsGagnees = 50 * monstreActuel.niveau;
 
-                    printf(VERT "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n\n" RESET
-                    ,joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv , pointsGagnees);
+                    printf(VERT "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv, pointsGagnees);
 
                     printf(BLEU "\t[INFO] %s meurt sous le coup de l'attaque\t\t+%dpts\n\n\n" RESET, monstreActuel.nom, pointsGagnees);
-
                 }
 
                 else
@@ -290,12 +287,9 @@ void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
                     // Ajout des points gagnés par le joueur
                     pointsJoueur += pointsGagnees;
 
-                    printf(VERT "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n\n" RESET
-                    ,joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv, pointsGagnees);
-
+                    printf(VERT "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv, pointsGagnees);
                 }
                 break;
-
             }
 
             // Si le monstre gagne
@@ -310,19 +304,15 @@ void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
                     // On met les points de vie du joueur à 0
                     joueur.nbPv = 0;
 
-
-                    printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET
-                    ,joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
-
+                    printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
 
                     printf(BLEU "[INFO] PERDU... Nombre de points acquis : %d\n\n" RESET, pointsJoueur);
                     return;
                 }
 
                 printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET,
-                joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
+                       joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
                 break;
-
             }
 
             // Si égalité
@@ -331,23 +321,17 @@ void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
             {
 
                 printf(MAGENTA "\t[EGALITE] Aucun de %s(%dptV) et %s(%dptV) ne gagne l'attaque\n\n" RESET,
-                joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
+                       joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
                 break;
             }
-
             }
-
         }
 
         // Passage au monstre suivant
-
         nbMonstres--;
-
         index++;
-
     }
-
-}   
+}
 
 /*
 void gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres)
@@ -403,7 +387,7 @@ void gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
         int indexArmeMonstre = rand() % monstreActuel.nbArmes;
 
         // Arme du monstre
-        char armeMonstre = monstreActuel.armes[indexArmeMonstre];   
+        char armeMonstre = monstreActuel.armes[indexArmeMonstre];
         printf(BLEU "[INFO] %s(%c) attaque %s(%c)\n" RESET, joueur.pseudo, armeChoisie, monstreActuel.nom , armeMonstre);
 
         // Détermination du gagnant
@@ -575,7 +559,7 @@ char determinerGagnant(char armeJoueur, char armeMonstre)
     return 'E';
 }
 
-Monstre *loadMonstres(char *filenom, int *nbMonstres, int *indexMonstresGroupe1, int *indexMonstresGroupe2, int *nbMonstresGroupe1, int *nbMonstresGroupe2)
+Monstre *loadMonstres(char *filenom, int *nbMonstres, int **indexMonstresGroupe1, int **indexMonstresGroupe2, int *nbMonstresGroupe1, int *nbMonstresGroupe2)
 {
     FILE *file = fopen(filenom, "r");
     if (file == NULL)
@@ -606,7 +590,7 @@ Monstre *loadMonstres(char *filenom, int *nbMonstres, int *indexMonstresGroupe1,
     // Lecture des monstres
     for (int i = 0; i < *nbMonstres; i++)
     {
-        Monstre *monster = &monstres[i];
+        Monstre *monstre = &monstres[i];
         int j = 0;
         char c;
 
@@ -621,12 +605,12 @@ Monstre *loadMonstres(char *filenom, int *nbMonstres, int *indexMonstresGroupe1,
                 fclose(file);
                 return NULL;
             }
-            monster->nom[j] = c;
+            monstre->nom[j] = c;
             j++;
             fscanf(file, "%c", &c);
         }
         // Ajout du caractère de fin de chaîne
-        monster->nom[j] = '\0';
+        monstre->nom[j] = '\0';
 
         // Vérification de la lecture du nom
         if (j == 0)
@@ -637,31 +621,31 @@ Monstre *loadMonstres(char *filenom, int *nbMonstres, int *indexMonstresGroupe1,
         }
 
         fscanf(file, "%d,%d,%d,%d",
-               &monster->niveau,
-               &monster->pv,
-               &monster->degats,
-               &monster->type);
+               &monstre->niveau,
+               &monstre->pv,
+               &monstre->degats,
+               &monstre->type);
 
         // Allocation dynamique pour les armes du monstre
-        switch (monster->niveau)
+        switch (monstre->niveau)
         {
         case 1:
-            monster->nbArmes = 4;
-            monster->armes = malloc(monster->nbArmes * sizeof(char));
+            monstre->nbArmes = 4;
+            monstre->armes = malloc(monstre->nbArmes * sizeof(char));
 
-            monster->armes = "PFCO";
+            strcpy(monstre->armes, "PFCO");
             break;
         case 2:
-            monster->nbArmes = 3;
-            monster->armes = malloc(monster->nbArmes * sizeof(char));
+            monstre->nbArmes = 3;
+            monstre->armes = malloc(monstre->nbArmes * sizeof(char));
 
-            monster->armes = "PFC";
+            strcpy(monstre->armes, "PFC");
             break;
         case 3:
-            monster->nbArmes = 5;
-            monster->armes = malloc(monster->nbArmes * sizeof(char));
+            monstre->nbArmes = 5;
+            monstre->armes = malloc(monstre->nbArmes * sizeof(char));
 
-            monster->armes = "PFCO#";
+            strcpy(monstre->armes, "PFCO#");
             break;
         default:
             printf("Niveau de monstre invalide\n");
@@ -669,18 +653,18 @@ Monstre *loadMonstres(char *filenom, int *nbMonstres, int *indexMonstresGroupe1,
             return NULL;
         }
 
-        switch (monster->type)
+        switch (monstre->type)
         {
         case 1:
             *nbMonstresGroupe1 = *nbMonstresGroupe1 + 1;
-            indexMonstresGroupe1 = realloc(indexMonstresGroupe1, *nbMonstresGroupe1 * sizeof(int));
-            indexMonstresGroupe1[*nbMonstresGroupe1 - 1] = i;
+            *indexMonstresGroupe1 = realloc(*indexMonstresGroupe1, *nbMonstresGroupe1 * sizeof(int));
+            (*indexMonstresGroupe1)[*nbMonstresGroupe1 - 1] = i;
 
             break;
         case 2:
             *nbMonstresGroupe2 = *nbMonstresGroupe2 + 1;
-            indexMonstresGroupe2 = realloc(indexMonstresGroupe2, *nbMonstresGroupe2 * sizeof(int));
-            indexMonstresGroupe2[*nbMonstresGroupe2 - 1] = i;
+            *indexMonstresGroupe2 = realloc(*indexMonstresGroupe2, *nbMonstresGroupe2 * sizeof(int));
+            (*indexMonstresGroupe2)[*nbMonstresGroupe2 - 1] = i;
 
             break;
         }
@@ -759,7 +743,7 @@ Joueur *loadJoueursFromBinary(char *filenom, int *nbJoueurs)
     fread(nbJoueurs, sizeof(int), 1, file);
 
     // Vérification de la lecture du nombre de joueurs
-    if (*nbJoueurs < 0)
+    if (*nbJoueurs <= 0)
     {
         printf("Erreur lors de la lecture du nombre de joueurs\n");
         fclose(file);
@@ -788,20 +772,23 @@ Joueur *loadJoueursFromBinary(char *filenom, int *nbJoueurs)
         fread(&joueur->nbDegats, sizeof(int), 1, file);
         fread(&joueur->nbParties, sizeof(int), 1, file);
 
-        // Allocation dynamique pour les scores
-        joueur->scores = malloc(joueur->nbParties * sizeof(int));
-
-        // Vérification de l'allocation
-        if (joueur->scores == NULL)
+        if (joueur->nbParties > 0)
         {
-            printf("Erreur d'allocation mémoire pour les scores\n");
-            fclose(file);
-            return NULL;
+            // Allocation dynamique pour les scores
+            joueur->scores = malloc(joueur->nbParties * sizeof(int));
+
+            // Vérification de l'allocation
+            if (joueur->scores == NULL)
+            {
+                printf("Erreur d'allocation mémoire pour les scores\n");
+                fclose(file);
+                return NULL;
+            }
+
+            // Lecture des scores
+            fread(joueur->scores, sizeof(int), joueur->nbParties, file);
         }
-
-        // Lecture des scores
-        fread(joueur->scores, sizeof(int), joueur->nbParties, file);
-
+        joueur->scores = NULL;
         // Lecture des armes
         fread(joueur->armes, sizeof(char), 5, file);
     }
@@ -870,9 +857,6 @@ int MinScore(Joueur *JoueursTab[], int nbJoueurs)
     return min;
 }
 
-
-
-
 void global(void)
 {
     Boolean quit = False;
@@ -882,7 +866,7 @@ void global(void)
     int nbMonstresGroupe1 = 0;
     int nbMonstresGroupe2 = 0;
     Joueur *joueursTab = loadJoueursFromBinary("game.dat", &nbJoueurs);
-    Monstre *monstres = loadMonstres("monstres.txt", &nbMonstres, indexMonstresGroupe1, indexMonstresGroupe2, &nbMonstresGroupe1, &nbMonstresGroupe2);
+    Monstre *monstres = loadMonstres("monstres.txt", &nbMonstres, &indexMonstresGroupe1, &indexMonstresGroupe2, &nbMonstresGroupe1, &nbMonstresGroupe2);
 
     while (!quit)
     {
@@ -909,13 +893,13 @@ void global(void)
             createNewGameDisplay(&nbJoueurs, &joueursTab, monstres, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
             break;
         case 3:
-            //showAllJoueurs(joueursTab, nbJoueurs);
+            // showAllJoueurs(joueursTab, nbJoueurs);
             break;
         case 4:
-            //showAllbybiggestScores(joueursTab, nbJoueurs);
+            // showAllbybiggestScores(joueursTab, nbJoueurs);
             break;
         case 5:
-            //ShowJoueurPreciseStats(joueursTab, nbJoueurs);
+            // ShowJoueurPreciseStats(joueursTab, nbJoueurs);
             break;
         case 9:
             printf("Au revoir...\n");
