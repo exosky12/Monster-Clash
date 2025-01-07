@@ -203,7 +203,7 @@ int rechercheArme(char arme, char armes[], int nbArmes)
 }
 
 // Ajouter type de retour et paramètres
-void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres)
+int gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres)
 {
     printf("\n[CONTEXTE] Vous arrivez dans un corridor, bordé par deux falaises des monstres arrivent les uns après les autres.\n\n");
 
@@ -307,7 +307,7 @@ void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
                     printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
 
                     printf(BLEU "[INFO] PERDU... Nombre de points acquis : %d\n\n" RESET, pointsJoueur);
-                    return;
+                    return 0;
                 }
 
                 printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET,
@@ -317,9 +317,7 @@ void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
 
             // Si égalité
             case 'E':
-
             {
-
                 printf(MAGENTA "\t[EGALITE] Aucun de %s(%dptV) et %s(%dptV) ne gagne l'attaque\n\n" RESET,
                        joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
                 break;
@@ -331,9 +329,10 @@ void gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
         nbMonstres--;
         index++;
     }
+    return pointsJoueur;
 }
 
-void gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres)
+int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres)
 {
     printf(BLEU "[INFO] Tous les monstres sont morts...\n\n" RESET);
     printf("[CONTEXTE] vous arrivez au bout du corridor, une plaine herbeuse apparaît. Malheureusement des monstres sortent de partout pour tous vous attaquer en même temps ou presque...\n\n");
@@ -440,7 +439,7 @@ void gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
                 joueur.nbPv = 0;
                 printf(ROUGE "\t[DEFAITE] %s(%dptV) perd l'attaque contre %s(%dptV)\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
                 printf(BLEU "[INFO] PERDU... Nombre de points acquis : %d\n\n" RESET, pointsJoueur);
-                return;
+                return 0;
             }
 
             printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
@@ -462,6 +461,8 @@ void gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int 
             file = ajouter(file, monstreActuelIndex);
         }
     }
+
+    return pointsJoueur;
 }
 
 void createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2)
@@ -936,11 +937,12 @@ void global(void)
         }
         saveJoueursToBinary("game.dat", joueursTab, nbJoueurs);
     }
+}
 
-    void clearScreen(void)
+void clearScreen(void)
+{
+    for (int i = 0; i < 20; i++)
     {
-        for (int i = 0; i < 20; i++)
-        {
-            printf("\n");
-        }
+        printf("\n");
     }
+}
