@@ -96,6 +96,7 @@ int longueur(File f)
     i++;
     return i;
 }
+
 /*
 void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTab[], int indexMonstresTabGroupe1[], int nbMonstresGroupe1)
 {
@@ -467,7 +468,7 @@ void createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresT
 {
     char pseudoJoueur[50];
     clearScreen();
-    int index, trouve;
+    int index, trouve, pointsGagnes = 0;
     printf(GRAS VERT "▁ ▂ ▄ ▅ ▆ ▇ █ Créer une nouvelle partie █ ▇ ▆ ▅ ▄ ▂ ▁\n\n" RESET);
     printf(JAUNE "[ACTION] Entrer votre pseudo > " RESET);
     scanf("%s", pseudoJoueur);
@@ -493,14 +494,22 @@ void createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresT
         }
 
         (*joueursTab)[*nbJoueurs - 1] = joueur;
-        gameGroupe1((*joueursTab)[*nbJoueurs - 1], *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1);
-        gameGroupe2((*joueursTab)[*nbJoueurs - 1], *joueursTab, monstresTab, indexMonstresTabGroupe2, nbMonstresGroupe2);
+        pointsGagnes += gameGroupe1((*joueursTab)[*nbJoueurs - 1], *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1);
+        sauvegarderScoreJoueur(*joueursTab, *nbJoueurs - 1, pointsGagnes);
+        pointsGagnes += gameGroupe2((*joueursTab)[*nbJoueurs - 1], *joueursTab, monstresTab, indexMonstresTabGroupe2, nbMonstresGroupe2);
     }
     else
     {
-        gameGroupe1((*joueursTab)[index], *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1);
-        gameGroupe2((*joueursTab)[index], *joueursTab, monstresTab, indexMonstresTabGroupe2, nbMonstresGroupe2);
+        pointsGagnes += gameGroupe1((*joueursTab)[index], *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1);
+        pointsGagnes += gameGroupe2((*joueursTab)[index], *joueursTab, monstresTab, indexMonstresTabGroupe2, nbMonstresGroupe2);
     }
+}
+
+void sauvegarderScoreJoueur(Joueur *joueursTab, int indexJoueur, int pointsGagnes)
+{
+    joueursTab[indexJoueur].scores = (int *)realloc(joueursTab[indexJoueur].scores, (joueursTab[indexJoueur].nbParties + 1) * sizeof(int));
+    joueursTab[indexJoueur].scores[joueursTab[indexJoueur].nbParties] = pointsGagnes;
+    joueursTab[indexJoueur].nbParties++;
 }
 
 char determinerGagnant(char armeJoueur, char armeMonstre)
@@ -873,7 +882,7 @@ void trieScoreJoueur(Joueur *JoueursTab[], int nbJoueurs)
 void global(void)
 {
     Boolean quit = False;
-    int choice, nbJoueurs, nbMonstres;
+    int choice=1, nbJoueurs, nbMonstres;
     int *indexMonstresGroupe1 = NULL;
     int *indexMonstresGroupe2 = NULL;
     int nbMonstresGroupe1 = 0;
@@ -883,53 +892,55 @@ void global(void)
 
     while (!quit)
     {
-        clearScreen();
-        printf(GRAS VERT "\n\t▁ ▂ ▄ ▅ ▆ ▇ █  MENU  █ ▇ ▆ ▅ ▄ ▂ ▁\n\n\n" RESET);
-        printf("[1] Jouer une partie prédéfinie\n");
-        printf("[2] Créer une nouvelle partie\n");
-        printf("[3] Afficher la liste des joueurs triée par nom\n");
-        printf("[4] Afficher la liste des joueurs triée par meilleur score\n");
-        printf("[5] Afficher les statistiques d'un joueur précis\n");
-
-        printf("[9] Quitter et sauvegarder\n\n");
-        printf("Votre choix > ");
-        // showEveryMonstres(monstres, nbMonstres);
-        // showAllJoueurs(joueursTab, nbJoueurs);
-        // printf("Nombre de joueurs : %d\n", nbJoueurs);
-        scanf(" %d", &choice);
-        switch (choice)
+        while (choice < 1 || choice > 6)
         {
-        case 1:
-            // existingGameDisplay(&joueursTab, &nbJoueurs, monstres, indexMonstresGroupe1, nbMonstres);
-            break;
-        case 2:
-            createNewGameDisplay(&nbJoueurs, &joueursTab, monstres, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
-            break;
-        case 3:
+            clearScreen();
+            printf(GRAS VERT "\n\t▁ ▂ ▄ ▅ ▆ ▇ █  MENU  █ ▇ ▆ ▅ ▄ ▂ ▁\n\n\n" RESET);
+            printf("[1] Jouer une partie prédéfinie\n");
+            printf("[2] Créer une nouvelle partie\n");
+            printf("[3] Afficher la liste des joueurs triée par nom\n");
+            printf("[4] Afficher la liste des joueurs triée par meilleur score\n");
+            printf("[5] Afficher les statistiques d'un joueur précis\n");
+
+            printf("[6] Quitter et sauvegarder\n\n");
+            printf("Votre choix > ");
+            // showEveryMonstres(monstres, nbMonstres);
             // showAllJoueurs(joueursTab, nbJoueurs);
-            break;
-        case 4:
-            // showAllbybiggestScores(joueursTab, nbJoueurs);
-            break;
-        case 5:
-            // ShowJoueurPreciseStats(joueursTab, nbJoueurs);
-            break;
-        case 9:
-            printf("Au revoir...\n");
-            quit = True;
-            break;
-        default:
-            printf("Choix invalide\n");
-            break;
+            // printf("Nombre de joueurs : %d\n", nbJoueurs);
+            scanf(" %d", &choice);
+            switch (choice)
+            {
+            case 1:
+                // existingGameDisplay(&joueursTab, &nbJoueurs, monstres, indexMonstresGroupe1, nbMonstres);
+                break;
+            case 2:
+                createNewGameDisplay(&nbJoueurs, &joueursTab, monstres, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
+                break;
+            case 3:
+                // showAllJoueurs(joueursTab, nbJoueurs);
+                break;
+            case 4:
+                // showAllbybiggestScores(joueursTab, nbJoueurs);
+                break;
+            case 5:
+                // ShowJoueurPreciseStats(joueursTab, nbJoueurs);
+                break;
+            case 9:
+                printf("Au revoir...\n");
+                quit = True;
+                break;
+            default:
+                printf("Choix invalide\n");
+                break;
+            }
+        }
+        saveJoueursToBinary("game.dat", joueursTab, nbJoueurs);
+    }
+
+    void clearScreen(void)
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            printf("\n");
         }
     }
-    saveJoueursToBinary("game.dat", joueursTab, nbJoueurs);
-}
-
-void clearScreen(void)
-{
-    for (int i = 0; i < 20; i++)
-    {
-        printf("\n");
-    }
-}
