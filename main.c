@@ -156,13 +156,13 @@ int PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
 
     // Premier groupe de monstres
     int nbMonstresPremierGrp;
-    printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans le groupe %d\n" RESET, choixOrdreGroupe);
+    printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans le groupe 1\n" RESET);
     printf("> ");
     scanf("%d", &nbMonstresPremierGrp);
     while (nbMonstresPremierGrp < 1)
     {
         printf(ROUGE "[ERREUR] Nombre de monstres incorrect\n" RESET);
-        printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans le groupe %d\n" RESET, choixOrdreGroupe);
+        printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans le groupe 1\n" RESET);
         printf("> ");
         scanf("%d", &nbMonstresPremierGrp);
     }
@@ -178,7 +178,6 @@ int PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
 
     for (int i = 0; i < nbMonstresPremierGrp; i++)
     {
-        // appeler la fonction creationGroupeMonstres
         monstresTab[i] = creationMonstre(1);
         indexMonstresGroupe1[i] = i;
         nbMonstresGroupe1++;
@@ -186,13 +185,13 @@ int PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
 
     // Deuxième groupe de monstres
     int nbMonstresDeuxiemeGrp;
-    printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans l'autre groupe\n" RESET);
+    printf(JAUNE "[ACTION] Combien voulez-vous de monstres du groupe 2\n" RESET);
     printf("> ");
     scanf("%d", &nbMonstresDeuxiemeGrp);
     while (nbMonstresDeuxiemeGrp < 1)
     {
         printf(ROUGE "[ERREUR] Nombre de monstres incorrect\n" RESET);
-        printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans l'autre groupe'\n" RESET);
+        printf(JAUNE "[ACTION] Combien voulez-vous de monstres du groupe 2\n" RESET);
         printf("> ");
         scanf("%d", &nbMonstresDeuxiemeGrp);
     }
