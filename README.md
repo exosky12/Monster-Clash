@@ -39,4 +39,10 @@ Le format ce présente comme suit:
 ## Reste à faire
 
 - partie prédéfinie à finir
-- ajouter récursivité
+- ajouter récursivité (à voir pour quelques fonctions d'affichage de stats mais porbablement pas worse)
+  (ptre changer RechercheDicho -> recursif)
+- remettre les montres comme avant (level,degat...)
+- verifier si respect des consignes (nottement ceux sur quoi on est evalué, ex : différente fonctions de tri -> normalement c'est bon ça)
+- s'il reste du temps niveau sur les joueurs mais vraiment à voir
+- faire gaffe -> chaque joueur à le meme score
+  (par exemple si un joueur fait une partie il aura toujours 540 points peut importe ce qu'il fait > ptre chose à voir)
