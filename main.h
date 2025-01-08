@@ -59,7 +59,7 @@ int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
 
 void sauvegarderScoreJoueur(Joueur *joueursTab, int indexJoueur, int pointsGagnes);
 
-void createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2);
+int createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2);
 char determinerGagnant(char weaponJoueur, char weaponMonstre);
 
 int rechercheDicoJoueur(char pseudoJoueur[50], Joueur joueursTab[], int nbJoueurs, int *trouve);
@@ -71,15 +71,17 @@ Monstre *loadMonstres(char *filenom, int *nbMonstres, int **indexMonstresGroup1,
 Joueur *loadJoueursFromBinary(char *filenom, int *nbJoueurs);
 void saveJoueursToBinary(char *filenom, Joueur *joueurs, int nbJoueurs);
 
-int biggestScore(Joueur *JoueursTab[], int nbJoueurs);
-int MinScore(Joueur *JoueursTab[], int nbJoueurs);
-
+void trierScoresTousJoueurs(Joueur *joueursTab, int nbJoueurs);
 void trieScoreJoueur(Joueur *JoueursTab[], int nbJoueurs);
 
-void remplirIndexJoueursTriesParNom(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParNom[]);
-void remplirIndexJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParScore[]);
+void remplirIndexJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int **indexJoueursTriesParScore);
 
-void afficherJoueursTriesParNom(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParNom[]);
+void afficherJoueursTriesParNom(Joueur *joueursTab, int nbJoueurs);
 void afficherJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParScore[]);
 
 void afficherStatsJoueur(Joueur *joueursTab, int nbJoueurs);
+
+void showAllPlayers(Joueur *joueursTab, int nbJoueurs);
+
+void insererJoueurOrdreAlphabetique(Joueur **joueursTab, int *nbJoueurs, int indexTemp);
+void echangerPosition(Joueur **joueursTab, int index1, int index2);

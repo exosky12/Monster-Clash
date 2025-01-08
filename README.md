@@ -1,5 +1,8 @@
 # SAE1.02
 
+# ⚠ Suppimer ancien ```game.dat``` par précaution 
+Bug pourrait survenir car non trié du à ancienne version
+
 Devoir jeu en C
 
 ## Description  ```monsters.txt```
@@ -35,9 +38,5 @@ Le format ce présente comme suit:
 
 ## Reste à faire
 
-- Fonction stats à vérifier (segmentation fault)
 - partie prédéfinie à finir
-- sauvegarde de score ?
-- trier tableau pour recherche dico
 - ajouter récursivité
-- améliorer affichage [5]

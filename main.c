@@ -566,7 +566,7 @@ int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
     return pointsJoueur;
 }
 
-void createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2)
+int createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2)
 {
     char pseudoJoueur[50];
     clearScreen();
@@ -592,36 +592,54 @@ void createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresT
         if (joueursTab == NULL)
         {
             printf("Erreur d'allocation mémoire\n");
-            return;
+            return -1;
         }
 
+        // ajouter le joueur
         (*joueursTab)[*nbJoueurs - 1] = joueur;
         (*joueursTab)[*nbJoueurs - 1].nbParties = 1;
+
+        // jouer la partie
         pointsGagnes = gameGroupe1((*joueursTab)[*nbJoueurs - 1], *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1, pointsGagnes);
         sauvegarderScoreJoueur(*joueursTab, *nbJoueurs - 1, pointsGagnes);
         pointsGagnes = gameGroupe2((*joueursTab)[*nbJoueurs - 1], *joueursTab, monstresTab, indexMonstresTabGroupe2, nbMonstresGroupe2, pointsGagnes);
         sauvegarderScoreJoueur(*joueursTab, *nbJoueurs - 1, pointsGagnes);
+
+        // afficher le résultat
         if ((*joueursTab)[*nbJoueurs - 1].nbPv > 0)
             printf(VERT "[PARTIE GAGNEE] Bravo ! Vous avez survécu aux terribles monstres !!!\n" RESET);
         else
             printf(ROUGE "[PARTIE PERDUE] Vous avez été vaincu par les monstres de fou furieux...\n" RESET);
+
+        printf("\nAppuyer sur entrée pour continuer...");
+        getchar();
+        getchar();
+
+        return *nbJoueurs - 1;
     }
     else
     {
+        // jouer la partie
         (*joueursTab)[index].nbParties++;
         pointsGagnes = gameGroupe1((*joueursTab)[index], *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1, pointsGagnes);
         sauvegarderScoreJoueur(*joueursTab, *nbJoueurs - 1, pointsGagnes);
         pointsGagnes = gameGroupe2((*joueursTab)[index], *joueursTab, monstresTab, indexMonstresTabGroupe2, nbMonstresGroupe2, pointsGagnes);
         sauvegarderScoreJoueur(*joueursTab, *nbJoueurs - 1, pointsGagnes);
+
+        // afficher le résultat
         if ((*joueursTab)[index].nbPv > 0)
             printf(VERT "[PARTIE GAGNEE] Bravo ! Vous avez survécu aux terribles monstres !!!\n" RESET);
         else
             printf(ROUGE "[PARTIE PERDUE] Vous avez été vaincu par les monstres de fou furieux...\n" RESET);
+
+        printf("\nAppuyer sur entrée pour continuer...");
+        getchar();
+        getchar();
+
+        return index;
     }
 
-    printf("Appuyer sur entrée pour continuer...");
-    getchar();
-    getchar();
+    
 }
 
 void sauvegarderScoreJoueur(Joueur *joueursTab, int indexJoueur, int pointsGagnes)
@@ -829,7 +847,7 @@ Joueur *loadJoueursFromBinary(char *filenom, int *nbJoueurs)
         char choice;
 
         // Demande à l'utilisateur s'il veut créer un nouveau fichier
-        printf("Voulez-vous créer un nouveau fichier de sauvegarde ? (O/n) > ");
+        printf("Voulez-vous créer un nouveau fichier de sauvegarde ? (o/n) > ");
 
         // Lecture du choix de l'utilisateur
         scanf(" %c", &choice);
@@ -907,9 +925,13 @@ Joueur *loadJoueursFromBinary(char *filenom, int *nbJoueurs)
             // Lecture des scores
             fread(joueur->scores, sizeof(int), joueur->nbParties, file);
         }
-        joueur->scores = NULL;
+
+        // Si le joueur n'a pas encore joué de parties
+        else
+            joueur->scores = NULL;
+
         // Lecture des armes
-        fread(joueur->armes, sizeof(char), 5, file);
+        fread(joueur->armes, sizeof(char), 4, file);
     }
     fclose(file);
     return joueurs;
@@ -945,90 +967,51 @@ void saveJoueursToBinary(char *filenom, Joueur *joueurs, int nbJoueurs)
         fwrite(joueur->scores, sizeof(int), joueur->nbParties, file);
 
         // Écrit les armes
-        fwrite(joueur->armes, sizeof(char), 5, file);
+        fwrite(joueur->armes, sizeof(char), 4, file);
     }
     fclose(file);
 }
 
-int biggestScore(Joueur *JoueursTab[], int nbJoueurs)
+void trierScoresJoueur(Joueur *joueur)
 {
-    int max = 0;
-    for (int i = 1; i < nbJoueurs; i++)
+    // Vérifier que le joueur a des scores
+    if (joueur->scores == NULL || joueur->nbParties <= 0)
     {
-        if (JoueursTab[i]->scores > JoueursTab[max]->scores)
-        {
-            max = i;
-        }
+        printf("Le joueur n'a pas de scores à trier.\n");
+        return;
     }
-    return max;
-}
 
-int MinScore(Joueur *JoueursTab[], int nbJoueurs)
-{
-    int min = 0;
-    for (int i = 1; i < nbJoueurs; i++)
+    // Tri des scores par ordre décroissant
+    for (int i = 0; i < joueur->nbParties - 1; i++)
     {
-        if (JoueursTab[i]->scores < JoueursTab[min]->scores)
+        for (int j = 0; j < joueur->nbParties - 1 - i; j++)
         {
-            min = i;
-        }
-    }
-    return min;
-}
-
-void trieScoreJoueur(Joueur *JoueursTab[], int nbJoueurs)
-{
-    Joueur *JoueurTemp;
-    int i, j;
-    for (i = 0; i < nbJoueurs; i++)
-    {
-        for (j = i + 1; j < nbJoueurs; j++)
-        {
-            if (JoueursTab[i]->scores < JoueursTab[j]->scores)
+            if (joueur->scores[j] < joueur->scores[j + 1])
             {
-                JoueurTemp = JoueursTab[i];
-                JoueursTab[i] = JoueursTab[j];
-                JoueursTab[j] = JoueurTemp;
+                // Échanger les valeurs si nécessaire
+                int temp = joueur->scores[j];
+                joueur->scores[j] = joueur->scores[j + 1];
+                joueur->scores[j + 1] = temp;
             }
         }
     }
 }
 
-void remplirIndexJoueursTriesParNom(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParNom[])
+
+void remplirIndexJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int **indexJoueursTriesParScore)
 {
-    indexJoueursTriesParNom = (int *)malloc(nbJoueurs * sizeof(int));
+    *indexJoueursTriesParScore = (int *)malloc(nbJoueurs * sizeof(int));
+
+    if(indexJoueursTriesParScore == NULL)
+    {
+        printf("Erreur d'allocation mémoire\n");
+        return;
+    }
 
     // Initialisation du tableau d'index
     for (int i = 0; i < nbJoueurs; i++)
     {
-        indexJoueursTriesParNom[i] = i;
-    }
-
-    // Tri des index en fonction des pseudos (ordre alphabétique)
-    for (int i = 0; i < nbJoueurs - 1; i++)
-    {
-        for (int j = i + 1; j < nbJoueurs; j++)
-        {
-            // Comparaison des pseudos via strcmp
-            if (strcmp(joueursTab[indexJoueursTriesParNom[i]].pseudo, joueursTab[indexJoueursTriesParNom[j]].pseudo) > 0)
-            {
-                // Échange des index si nécessaire
-                int temp = indexJoueursTriesParNom[i];
-                indexJoueursTriesParNom[i] = indexJoueursTriesParNom[j];
-                indexJoueursTriesParNom[j] = temp;
-            }
-        }
-    }
-}
-
-void remplirIndexJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParScore[])
-{
-    indexJoueursTriesParScore = (int *)malloc(nbJoueurs * sizeof(int));
-
-    // Initialisation du tableau d'index
-    for (int i = 0; i < nbJoueurs; i++)
-    {
-        indexJoueursTriesParScore[i] = i;
+        (*indexJoueursTriesParScore)[i] = i;
     }
 
     // Tri des index en fonction des scores
@@ -1037,37 +1020,47 @@ void remplirIndexJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int ind
         for (int j = i + 1; j < nbJoueurs; j++)
         {
             // Comparaison des scores
-            if (joueursTab[indexJoueursTriesParScore[i]].scores < joueursTab[indexJoueursTriesParScore[j]].scores)
+            if (joueursTab[(*indexJoueursTriesParScore)[i]].scores[0] < joueursTab[(*indexJoueursTriesParScore)[j]].scores[0])
             {
                 // Échange des index si nécessaire
-                int temp = indexJoueursTriesParScore[i];
-                indexJoueursTriesParScore[i] = indexJoueursTriesParScore[j];
-                indexJoueursTriesParScore[j] = temp;
+                int temp = (*indexJoueursTriesParScore)[i];
+                (*indexJoueursTriesParScore)[i] = (*indexJoueursTriesParScore)[j];
+                (*indexJoueursTriesParScore)[j] = temp;
             }
         }
     }
 }
 
-void afficherJoueursTriesParNom(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParNom[])
+void afficherJoueursTriesParNom(Joueur *joueursTab, int nbJoueurs)
 {
-    printf("Pesudo | Points\n");
+    clearScreen();
+    printf("Pesudo -> Points\n\n");
     for (int i = 0; i < nbJoueurs; i++)
     {
-        printf("%s | %d\n", joueursTab[indexJoueursTriesParNom[i]].pseudo, joueursTab[indexJoueursTriesParNom[i]].scores[0]);
+        printf("%s -> %d\n", joueursTab[i].pseudo, joueursTab[i].scores[0]);
     }
+    printf("\nAppuyer sur entrée pour continuer...");
+    getchar();
+    getchar();
 }
 
 void afficherJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParScore[])
 {
-    printf("Pesudo | Points\n");
+    clearScreen();
+    printf("Pesudo -> Points\n\n");
     for (int i = 0; i < nbJoueurs; i++)
     {
-        printf("%s | %d\n", joueursTab[indexJoueursTriesParScore[i]].pseudo, joueursTab[indexJoueursTriesParScore[i]].scores[0]);
+        printf("%s -> %d\n", joueursTab[indexJoueursTriesParScore[i]].pseudo, joueursTab[indexJoueursTriesParScore[i]].scores[0]);
     }
+
+    printf("\nAppuyer sur entrée pour continuer...");
+    getchar();
+    getchar();
 }
 
 void afficherStatsJoueur(Joueur *joueursTab, int nbJoueurs)
 {
+    clearScreen();
     char pseudoJoueur[50];
     int index, trouve;
     printf("Entrez le pseudo du joueur dont vous voulez afficher les statistiques : ");
@@ -1090,8 +1083,51 @@ void afficherStatsJoueur(Joueur *joueursTab, int nbJoueurs)
         }
         printf("\n");
         printf("Armes : %s\n", joueursTab[index].armes);
+
+        printf("\nAppuyer sur entrée pour continuer...");
+        getchar();
+        getchar();
     }
 }
+
+void showAllPlayers(Joueur *joueursTab, int nbJoueurs)
+{
+    printf("Pseudo\n\n");
+    for (int i = 0; i < nbJoueurs; i++)
+    {
+        printf("%s\n", joueursTab[i].pseudo);
+    }
+
+    printf("Appuyer sur entrée pour continuer...");
+    getchar();
+    getchar();
+}
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void insererJoueurOrdreAlphabetique(Joueur **joueursTab, int *nbJoueurs, int indexTemp)
+{
+    Joueur joueurTemp = (*joueursTab)[indexTemp]; // Stocker le joueur à déplacer
+    int indexOuInserer, trouve;
+
+    indexOuInserer = rechercheDicoJoueur(joueurTemp.pseudo, *joueursTab, *nbJoueurs, &trouve);
+
+    if(indexTemp == indexOuInserer)
+    {
+        return;
+    }
+    echangerPosition(joueursTab, indexTemp, indexOuInserer);
+}
+
+void echangerPosition(Joueur **joueursTab, int index1, int index2)
+{
+    Joueur joueurTemp = (*joueursTab)[index1];
+    (*joueursTab)[index1] = (*joueursTab)[index2];
+    (*joueursTab)[index2] = joueurTemp;
+}
+
 
 void global(void)
 {
@@ -1101,12 +1137,12 @@ void global(void)
     int *indexMonstresGroupe2 = NULL;
     int nbMonstresGroupe1 = 0;
     int nbMonstresGroupe2 = 0;
-
-    int *indexJoueursTriesParNom = NULL;
-    int *indexJoueursTriesParScore = NULL;
+    int indexTemp;
 
     Joueur *joueursTab = loadJoueursFromBinary("game.dat", &nbJoueurs);
     Monstre *monstresTab = loadMonstres("monstres.txt", &nbMonstres, &indexMonstresGroupe1, &indexMonstresGroupe2, &nbMonstresGroupe1, &nbMonstresGroupe2);
+
+    int *indexJoueursTriesParScore = NULL;
 
     while (!quit)
     {
@@ -1120,26 +1156,31 @@ void global(void)
 
         printf("[9] Quitter et sauvegarder\n\n");
         printf("Votre choix > ");
-        // showEveryMonstres(monstres, nbMonstres);
-        // showAllJoueurs(joueursTab, nbJoueurs);
-        // printf("Nombre de joueurs : %d\n", nbJoueurs);
         scanf(" %d", &choice);
         switch (choice)
         {
         case 1:
-            // existingGameDisplay(&joueursTab, &nbJoueurs, monstres, indexMonstresGroupe1, nbMonstres);
+            // indexTemp = existingGameDisplay(&joueursTab, &nbJoueurs, monstres, indexMonstresGroupe1, nbMonstres);
+            // trierScoresJoueur(&joueursTab[indexTemp]);
+            // insererJoueurOrdreAlphabetique(&joueursTab, &nbJoueurs, indexTemp);
             break;
         case 2:
-            createNewGameDisplay(&nbJoueurs, &joueursTab, monstresTab, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
+            indexTemp = createNewGameDisplay(&nbJoueurs, &joueursTab, monstresTab, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
+            trierScoresJoueur(&joueursTab[indexTemp]);
+            insererJoueurOrdreAlphabetique(&joueursTab, &nbJoueurs, indexTemp);
             break;
         case 3:
-            afficherJoueursTriesParNom(joueursTab, nbJoueurs, indexJoueursTriesParNom);
+            afficherJoueursTriesParNom(joueursTab, nbJoueurs);
             break;
         case 4:
+            remplirIndexJoueursTriesParScore(joueursTab, nbJoueurs, &indexJoueursTriesParScore);
             afficherJoueursTriesParScore(joueursTab, nbJoueurs, indexJoueursTriesParScore);
             break;
         case 5:
             afficherStatsJoueur(joueursTab, nbJoueurs);
+            break;
+        case 6:
+            showAllPlayers(joueursTab, nbJoueurs);
             break;
         case 9:
             printf("Au revoir...\n");
@@ -1171,7 +1212,6 @@ void global(void)
     free(monstresTab);
     free(indexMonstresGroupe1);
     free(indexMonstresGroupe2);
-    free(indexJoueursTriesParNom);
     free(indexJoueursTriesParScore);
 }
 
