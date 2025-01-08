@@ -1,4 +1,3 @@
-
 #include "main.h"
 
 File fileVide(void)
@@ -97,8 +96,7 @@ int longueur(File f)
     return i;
 }
 
-/*
-void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
+int PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
 {
     int *indexMonstresGroupe1 = NULL;
     int *indexMonstresGroupe2 = NULL;
@@ -121,7 +119,6 @@ void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
 
     if (trouve == 0)
     {
-        printf("Joueur non trouvé, création du joueur...\n");
         Joueur newJoueur;
         strcpy(newJoueur.pseudo, pseudoJoueur);
         newJoueur.nbPv = 20;
@@ -135,7 +132,7 @@ void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
         if (*joueursTab == NULL)
         {
             printf("Erreur d'allocation mémoire\n");
-            return;
+            exit(1);
         }
 
         (*joueursTab)[*nbJoueurs - 1] = newJoueur;
@@ -144,11 +141,12 @@ void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
 
     Joueur joueur = (*joueursTab)[index];
 
+    // choix de l'ordre de jeu
     int choixOrdreGroupe;
     printf(JAUNE "[ACTION] Par quel groupe de monstre souhaitez-vous démarrer ? (1 Pour séquentiel, 2 pour simultané)\n" RESET);
     printf("> ");
     scanf("%d", &choixOrdreGroupe);
-    while (choixOrdreGroupe != 1 || choixOrdreGroupe != 2)
+    while (choixOrdreGroupe != 1 && choixOrdreGroupe != 2)
     {
         printf(ROUGE "[ERREUR] Choix incorrect\n");
         printf(JAUNE "[ACTION] Par quel groupe de monstre souhaitez-vous démarrer ? (1 Pour séquentiel, 2 pour simultané)\n" RESET);
@@ -156,96 +154,181 @@ void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
         scanf("%d", &choixOrdreGroupe);
     }
 
-    int nbMonstres;
+    // Premier groupe de monstres
+    int nbMonstresPremierGrp;
     printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans le groupe %d\n" RESET, choixOrdreGroupe);
     printf("> ");
-    scanf("%d", &nbMonstres);
-    while (nbMonstres < 1)
+    scanf("%d", &nbMonstresPremierGrp);
+    while (nbMonstresPremierGrp < 1)
     {
         printf(ROUGE "[ERREUR] Nombre de monstres incorrect\n" RESET);
         printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans le groupe %d\n" RESET, choixOrdreGroupe);
+        printf("> ");
+        scanf("%d", &nbMonstresPremierGrp);
     }
 
-    int nbMonstresGroupeChoisi = 0;
-
-    for (int i = 1; i <= nbMonstres; i++)
+    // Allocation dynamique pour le tableau des monstres
+    monstresTab = (Monstre *)malloc(nbMonstresPremierGrp * sizeof(Monstre));
+    indexMonstresGroupe1 = (int *)malloc(nbMonstresPremierGrp * sizeof(int));
+    if (monstresTab == NULL)
     {
-        Monstre monstre;
-        printf(JAUNE "[ACTION] Quel nom souhaitez vous pour votre monstre numéro %d\n" RESET, nbMonstres);
-        printf("> ");
-        char nomMonstre[50];
-        scanf("%s", nomMonstre);
-        strcpy(monstre.nom, nomMonstre);
-
-        int niveauMonstre;
-        printf(JAUNE "[ACTION] Quel niveau souhaitez vous pour votre monstre numéro %d (Niveau 1, 2 ou 3)\n" RESET, nbMonstres);
-        printf("> ");
-        scanf("%d", &niveauMonstre);
-        while (niveauMonstre != 1 || niveauMonstre != 2 || niveauMonstre != 3)
-        {
-            printf(ROUGE "[ERREUR] Niveau de monstre incorrect\n" RESET);
-            printf(JAUNE "[ACTION] Quel niveau souhaitez vous pour votre monstre numéro %d (Niveau 1, 2 ou 3)\n" RESET, nbMonstres);
-        }
-        monstre.niveau = niveauMonstre;
-        if (choixOrdreGroupe == 1)
-        {
-            monstresTab[i] = monstre;
-            indexMonstresTabGroupe1[i] = i;
-            nbMonstresGroupe1++;
-        }
-        else
-        {
-            monstresTab[i] = monstre;
-            indexMonstresTabGroupe2[i] = i;
-            nbMonstresGroupe2++;
-        }
-        nbMonstresGroupeChoisi = i;
+        printf("Erreur allocation\n");
+        return -1;
     }
 
-    int nbMonstres;
+    for (int i = 0; i < nbMonstresPremierGrp; i++)
+    {
+        // appeler la fonction creationGroupeMonstres
+        monstresTab[i] = creationMonstre(1);
+        indexMonstresGroupe1[i] = i;
+        nbMonstresGroupe1++;
+    }
+
+    // Deuxième groupe de monstres
+    int nbMonstresDeuxiemeGrp;
     printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans l'autre groupe\n" RESET);
     printf("> ");
-    scanf("%d", &nbMonstres);
-    while (nbMonstres < 1)
+    scanf("%d", &nbMonstresDeuxiemeGrp);
+    while (nbMonstresDeuxiemeGrp < 1)
     {
         printf(ROUGE "[ERREUR] Nombre de monstres incorrect\n" RESET);
         printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans l'autre groupe'\n" RESET);
+        printf("> ");
+        scanf("%d", &nbMonstresDeuxiemeGrp);
     }
 
-    for (int i = 1; i <= nbMonstres; i++)
-    {
-        Monstre monstre;
-        printf(JAUNE "[ACTION] Quel nom souhaitez vous pour votre monstre numéro %d\n" RESET, nbMonstres);
-        printf("> ");
-        char nomMonstre[50];
-        scanf("%s", nomMonstre);
-        strcpy(monstre.nom, nomMonstre);
+    // realloc monstresTab
+    monstresTab = (Monstre *)realloc(monstresTab, (nbMonstresDeuxiemeGrp + nbMonstresPremierGrp) * sizeof(Monstre));
+    indexMonstresGroupe2 = (int *)malloc(nbMonstresDeuxiemeGrp * sizeof(int));
 
-        int niveauMonstre;
-        printf(JAUNE "[ACTION] Quel niveau souhaitez vous pour votre monstre numéro %d (Niveau 1, 2 ou 3)\n" RESET, nbMonstres);
+    if (indexMonstresGroupe2 == NULL)
+    {
+        printf("Erreur allocation\n");
+        return -1;
+    }
+
+    // Création des monstres du deuxième groupe
+    for (int i = 0; i < nbMonstresDeuxiemeGrp; i++)
+    {
+        // appeler la fonction creationGroupeMonstres
+        monstresTab[i + nbMonstresPremierGrp] = creationMonstre(2);
+        indexMonstresGroupe2[i] = i + nbMonstresPremierGrp;
+        nbMonstresGroupe2++;
+    }
+
+    // Jouer la partie
+    (*joueursTab)[index].nbParties++;
+
+    if (choixOrdreGroupe == 1)
+    {
+        int pointsGagnes = 0;
+        // Jouer le premier groupe
+        pointsGagnes = gameGroupe1(joueur, *joueursTab, monstresTab, indexMonstresGroupe1, nbMonstresGroupe1, pointsGagnes);
+        sauvegarderScoreJoueur(*joueursTab, index, pointsGagnes);
+
+        printf(BLEU "[INFO] Tous les monstres sont morts...\n\n" RESET);
+
+        // Jouer le deuxième groupe
+        pointsGagnes = gameGroupe2(joueur, *joueursTab, monstresTab, indexMonstresGroupe2, nbMonstresGroupe2, pointsGagnes);
+        sauvegarderScoreJoueur(*joueursTab, index, pointsGagnes);
+    }
+    else
+    {
+        int pointsGagnes = 0;
+        // Jouer le deuxième groupe
+        pointsGagnes = gameGroupe2(joueur, *joueursTab, monstresTab, indexMonstresGroupe2, nbMonstresGroupe2, pointsGagnes);
+        sauvegarderScoreJoueur(*joueursTab, index, pointsGagnes);
+
+        printf(BLEU "[INFO] Tous les monstres sont morts...\n\n" RESET);
+
+        // Jouer le premier groupe
+        pointsGagnes = gameGroupe1(joueur, *joueursTab, monstresTab, indexMonstresGroupe1, nbMonstresGroupe1, pointsGagnes);
+        sauvegarderScoreJoueur(*joueursTab, index, pointsGagnes);
+    }
+
+    if (joueur.nbPv > 0)
+    {
+        printf(VERT "[PARTIE GAGNEE] Bravo ! Vous avez survécu aux terribles monstres !!!\n" RESET);
+        printf(GRAS "Appuyer sur entrée pour continuer...\n" RESET);
+        getchar();
+        getchar();
+    }
+
+    else
+    {
+        printf(ROUGE "[PARTIE PERDUE] Vous avez été vaincu par les monstres de fou furieux...\n" RESET);
+        printf(GRAS "Appuyer sur entrée pour continuer...\n" RESET);
+        getchar();
+        getchar();
+    }
+
+    free(monstresTab);
+    free(indexMonstresGroupe1);
+    free(indexMonstresGroupe2);
+
+    return index;
+}
+
+Monstre creationMonstre(int groupe)
+{
+    Monstre monstre;
+
+    // Nom du monstre
+    char nomMonstre[50];
+    printf(JAUNE "[ACTION] Quel nom souhaitez vous pour votre monstre\n" RESET);
+    printf("> ");
+    getchar();
+    fgets(nomMonstre, 50, stdin);
+
+    nomMonstre[strlen(nomMonstre) - 1] = '\0';
+
+    // Niveau du monstre
+    int niveauMonstre;
+    printf(JAUNE "[ACTION] Quel niveau souhaitez vous pour votre monstre (Niveau 1, 2 ou 3)\n" RESET);
+    printf("> ");
+    scanf("%d", &niveauMonstre);
+
+    // Vérification du niveau du monstre
+    while (niveauMonstre != 1 && niveauMonstre != 2 && niveauMonstre != 3)
+    {
+        printf(ROUGE "[ERREUR] Niveau de monstre incorrect\n" RESET);
+        printf(JAUNE "[ACTION] Quel niveau souhaitez vous pour votre monstre (Niveau 1, 2 ou 3)\n" RESET);
         printf("> ");
         scanf("%d", &niveauMonstre);
-        while (niveauMonstre != 1 || niveauMonstre != 2 || niveauMonstre != 3)
-        {
-            printf(ROUGE "[ERREUR] Niveau de monstre incorrect\n" RESET);
-            printf(JAUNE "[ACTION] Quel niveau souhaitez vous pour votre monstre numéro %d (Niveau 1, 2 ou 3)\n" RESET, nbMonstres);
-        }
-        monstre.niveau = niveauMonstre;
-        if (choixOrdreGroupe == 1)
-        {
-            monstresTab[i + nbMonstresGroupeChoisi] = monstre;
-            indexMonstresTabGroupe2[i] = i + nbMonstresGroupeChoisi;
-            nbMonstresGroupe2++;
-        }
-        else
-        {
-            monstresTab[i + nbMonstresGroupeChoisi] = monstre;
-            indexMonstresTabGroupe1[i] = i + nbMonstresGroupeChoisi;
-            nbMonstresGroupe1++;
-        }
     }
+
+    // Initialisation du monstre
+    strcpy(monstre.nom, nomMonstre);
+    monstre.niveau = niveauMonstre;
+    monstre.pv = 4;
+    monstre.degats = 1;
+    monstre.type = groupe;
+
+    // Initialisation des armes du monstre
+    switch (monstre.niveau)
+    {
+    case 1:
+        monstre.nbArmes = 4;
+        monstre.armes = (char *)malloc(monstre.nbArmes * sizeof(char));
+
+        strcpy(monstre.armes, "PFCO");
+        break;
+    case 2:
+        monstre.nbArmes = 3;
+        monstre.armes = (char *)malloc(monstre.nbArmes * sizeof(char));
+
+        strcpy(monstre.armes, "PFC");
+        break;
+    case 3:
+        monstre.nbArmes = 5;
+        monstre.armes = (char *)malloc(monstre.nbArmes * sizeof(char));
+
+        strcpy(monstre.armes, "PFCO#");
+        break;
+    }
+
+    return monstre;
 }
-*/
 
 int rechercheDicoJoueur(char pseudoJoueur[50], Joueur joueursTab[], int nbJoueurs, int *trouve)
 {
@@ -290,17 +373,16 @@ int rechercheArme(char arme, char armes[], int nbArmes)
     return rechercheArme(arme, armes, nbArmes - 1);
 }
 
-
-// Ajouter type de retour et paramètres
 int gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres, int pointsJoueur)
 {
     printf("\n[CONTEXTE] Vous arrivez dans un corridor, bordé par deux falaises des monstres arrivent les uns après les autres.\n\n");
 
+    // index qui permet de parcourir les monstres
+    int index = 0;
+
     // Tant qu'il y a des monstres dans le groupe 1
     while (nbMonstres > 0)
     {
-        // index qui permet de parcourir les monstres
-        int index = 0;
 
         // Monstre actuel
         Monstre monstreActuel = monstresTab[indexMonstresTab[index]];
@@ -429,8 +511,7 @@ int gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
 
 int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres, int pointsJoueur)
 {
-    printf(BLEU "[INFO] Tous les monstres sont morts...\n\n" RESET);
-    printf("[CONTEXTE] vous arrivez au bout du corridor, une plaine herbeuse apparaît. Malheureusement des monstres sortent de partout pour tous vous attaquer en même temps ou presque...\n\n");
+    printf("[CONTEXTE] Vous arrivez au bout du corridor, une plaine herbeuse apparaît. Malheureusement des monstres sortent de partout pour tous vous attaquer en même temps ou presque...\n\n");
 
     // Création de la file des monstres du groupe 2
     File file = fileVide();
@@ -462,7 +543,7 @@ int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
             printf(" %c", joueur.armes[j]);
         }
 
-        printf("> ");
+        printf(" > ");
 
         // Arme choisie par le joueur
         char armeChoisie;
@@ -507,7 +588,8 @@ int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
         {
 
             // Réduction des points de vie du monstre
-            monstreActuel.pv -= joueur.nbDegats;
+            monstreActuel.pv = monstreActuel.pv - joueur.nbDegats;
+            monstresTab[indexMonstresTab[monstreActuelIndex]].pv = monstreActuel.pv;
 
             // Points gagnés par le joueur
             int pointsGagnes = 10;
@@ -645,8 +727,6 @@ int createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTa
 
         return index;
     }
-
-    
 }
 
 void sauvegarderScoreJoueur(Joueur *joueursTab, int indexJoueur, int pointsGagnes)
@@ -776,19 +856,19 @@ Monstre *loadMonstres(char *filenom, int *nbMonstres, int **indexMonstresGroupe1
         {
         case 1:
             monstre->nbArmes = 4;
-            monstre->armes = malloc(monstre->nbArmes * sizeof(char));
+            monstre->armes = (char *)malloc(monstre->nbArmes * sizeof(char));
 
             strcpy(monstre->armes, "PFCO");
             break;
         case 2:
             monstre->nbArmes = 3;
-            monstre->armes = malloc(monstre->nbArmes * sizeof(char));
+            monstre->armes = (char *)malloc(monstre->nbArmes * sizeof(char));
 
             strcpy(monstre->armes, "PFC");
             break;
         case 3:
             monstre->nbArmes = 5;
-            monstre->armes = malloc(monstre->nbArmes * sizeof(char));
+            monstre->armes = (char *)malloc(monstre->nbArmes * sizeof(char));
 
             strcpy(monstre->armes, "PFCO#");
             break;
@@ -817,26 +897,6 @@ Monstre *loadMonstres(char *filenom, int *nbMonstres, int **indexMonstresGroupe1
     fclose(file);
     return monstres;
 }
-
-/*
-//Fonction de test pour afficher les monstres chargés depuis le fichier
-
-void showEveryMonstres(Monstre *monstres, int nbMonstres)
-{
-    for (int i = 0; i < nbMonstres; i++)
-    {
-        printf("Nom : %s\n", monstres[i].nom);
-        printf("Niveau : %d\n", monstres[i].niveau);
-        printf("Points de vie : %d\n", monstres[i].pv);
-        printf("Dégâts : %d\n", monstres[i].degats);
-        printf("Nombre d'armes : %d\n", monstres[i].nbArmes);
-        printf("Armes : ");
-        for (int j = 0; j < monstres[i].nbArmes; j++)
-            printf("%c ", monstres[i].armes[j]);
-        printf("\n\n");
-    }
-}
-*/
 
 // Fonction pour charger les joueurs depuis un fichier binaire
 Joueur *loadJoueursFromBinary(char *filenom, int *nbJoueurs)
@@ -919,7 +979,7 @@ Joueur *loadJoueursFromBinary(char *filenom, int *nbJoueurs)
         if (joueur->nbParties > 0)
         {
             // Allocation dynamique pour les scores
-            joueur->scores = malloc(joueur->nbParties * sizeof(int));
+            joueur->scores = (int *)malloc(joueur->nbParties * sizeof(int));
 
             // Vérification de l'allocation
             if (joueur->scores == NULL)
@@ -1004,12 +1064,11 @@ void trierScoresJoueur(Joueur *joueur)
     }
 }
 
-
 void remplirIndexJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int **indexJoueursTriesParScore)
 {
     *indexJoueursTriesParScore = (int *)malloc(nbJoueurs * sizeof(int));
 
-    if(indexJoueursTriesParScore == NULL)
+    if (indexJoueursTriesParScore == NULL)
     {
         printf("Erreur d'allocation mémoire\n");
         return;
@@ -1157,8 +1216,6 @@ void insererJoueurOrdreAlphabetique(Joueur **joueursTab, int *nbJoueurs, int ind
     (*joueursTab)[indexOuInserer] = joueurTemp;
 }
 
-
-
 void global(void)
 {
     Boolean quit = False;
@@ -1191,9 +1248,9 @@ void global(void)
         switch (choice)
         {
         case 1:
-            // indexTemp = PartiePredefinie(&joueursTab, &nbJoueurs, monstres, indexMonstresGroupe1, nbMonstres);
-            // trierScoresJoueur(&joueursTab[indexTemp]);
-            // insererJoueurOrdreAlphabetique(&joueursTab, &nbJoueurs, indexTemp);
+            indexTemp = PartiePredefinie(&joueursTab, &nbJoueurs);
+            trierScoresJoueur(&joueursTab[indexTemp]);
+            insererJoueurOrdreAlphabetique(&joueursTab, &nbJoueurs, indexTemp);
             break;
         case 2:
             indexTemp = createNewGameDisplay(&nbJoueurs, &joueursTab, monstresTab, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);

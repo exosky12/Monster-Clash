@@ -53,9 +53,10 @@ int longueur(File f);
 
 void global(void);
 void clearScreen(void);
-void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTab[], int indexMonstresTabGroupe1[], int nbMonstresGroup1);
+int PartiePredefinie(Joueur **joueursTab, int *nbJoueurs);
 int gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres, int pointsJoueur);
 int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres, int pointsJoueur);
+Monstre creationMonstre(int groupe);
 
 void sauvegarderScoreJoueur(Joueur *joueursTab, int indexJoueur, int pointsGagnes);
 
