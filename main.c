@@ -622,9 +622,9 @@ int createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTa
         // jouer la partie
         (*joueursTab)[index].nbParties++;
         pointsGagnes = gameGroupe1((*joueursTab)[index], *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1, pointsGagnes);
-        sauvegarderScoreJoueur(*joueursTab, *nbJoueurs - 1, pointsGagnes);
+        sauvegarderScoreJoueur(*joueursTab, index, pointsGagnes);
         pointsGagnes = gameGroupe2((*joueursTab)[index], *joueursTab, monstresTab, indexMonstresTabGroupe2, nbMonstresGroupe2, pointsGagnes);
-        sauvegarderScoreJoueur(*joueursTab, *nbJoueurs - 1, pointsGagnes);
+        sauvegarderScoreJoueur(*joueursTab, index, pointsGagnes);
 
         // afficher le résultat
         if ((*joueursTab)[index].nbPv > 0)
@@ -1058,6 +1058,16 @@ void afficherJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int indexJo
     getchar();
 }
 
+float calculerScoreMoyen(Joueur joueur)
+{
+    int somme = 0;
+    for (int i = 0; i < joueur.nbParties; i++)
+    {
+        somme += joueur.scores[i];
+    }
+    return somme / joueur.nbParties;
+}
+
 void afficherStatsJoueur(Joueur *joueursTab, int nbJoueurs)
 {
     clearScreen();
@@ -1065,6 +1075,8 @@ void afficherStatsJoueur(Joueur *joueursTab, int nbJoueurs)
     int index, trouve;
     printf("Entrez le pseudo du joueur dont vous voulez afficher les statistiques : ");
     scanf("%s", pseudoJoueur);
+
+    // Recherche du joueur
     index = rechercheDicoJoueur(pseudoJoueur, joueursTab, nbJoueurs, &trouve);
     if (trouve == 0)
     {
@@ -1072,15 +1084,13 @@ void afficherStatsJoueur(Joueur *joueursTab, int nbJoueurs)
     }
     else
     {
-        printf("Pseudo : %s\n", joueursTab[index].pseudo);
+        printf("\nPseudo : %s\n", joueursTab[index].pseudo);
         printf("Points de vie : %d\n", joueursTab[index].nbPv);
         printf("Dégâts : %d\n", joueursTab[index].nbDegats);
         printf("Nombre de parties jouées : %d\n", joueursTab[index].nbParties);
-        printf("Scores : ");
-        for (int i = 0; i < joueursTab[index].nbParties; i++)
-        {
-            printf("%d ", joueursTab[index].scores[i]);
-        }
+        printf("Score minimum : %d\n", joueursTab[index].scores[joueursTab[index].nbParties - 1]);
+        printf("Score moyen : %.2f\n", calculerScoreMoyen(joueursTab[index]));
+        printf("Score maximum : %d\n", joueursTab[index].scores[0]);
         printf("\n");
         printf("Armes : %s\n", joueursTab[index].armes);
 
@@ -1103,15 +1113,13 @@ void showAllPlayers(Joueur *joueursTab, int nbJoueurs)
     getchar();
 }
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 void insererJoueurOrdreAlphabetique(Joueur **joueursTab, int *nbJoueurs, int indexTemp)
 {
-    Joueur joueurTemp = (*joueursTab)[indexTemp]; // Stocker le joueur à déplacer
+    // Stocker le joueur à déplacer
+    Joueur joueurTemp = (*joueursTab)[indexTemp]; 
     int indexOuInserer, trouve;
 
+    // Recherche de l'index où insérer le joueur
     indexOuInserer = rechercheDicoJoueur(joueurTemp.pseudo, *joueursTab, *nbJoueurs, &trouve);
 
     if(indexTemp == indexOuInserer)
@@ -1123,6 +1131,8 @@ void insererJoueurOrdreAlphabetique(Joueur **joueursTab, int *nbJoueurs, int ind
 
 void echangerPosition(Joueur **joueursTab, int index1, int index2)
 {
+    // Échanger les joueurs
+
     Joueur joueurTemp = (*joueursTab)[index1];
     (*joueursTab)[index1] = (*joueursTab)[index2];
     (*joueursTab)[index2] = joueurTemp;
@@ -1139,6 +1149,7 @@ void global(void)
     int nbMonstresGroupe2 = 0;
     int indexTemp;
 
+    // Chargement des données
     Joueur *joueursTab = loadJoueursFromBinary("game.dat", &nbJoueurs);
     Monstre *monstresTab = loadMonstres("monstres.txt", &nbMonstres, &indexMonstresGroupe1, &indexMonstresGroupe2, &nbMonstresGroupe1, &nbMonstresGroupe2);
 
@@ -1160,7 +1171,7 @@ void global(void)
         switch (choice)
         {
         case 1:
-            // indexTemp = existingGameDisplay(&joueursTab, &nbJoueurs, monstres, indexMonstresGroupe1, nbMonstres);
+            // indexTemp = PartiePredefinie(&joueursTab, &nbJoueurs, monstres, indexMonstresGroupe1, nbMonstres);
             // trierScoresJoueur(&joueursTab[indexTemp]);
             // insererJoueurOrdreAlphabetique(&joueursTab, &nbJoueurs, indexTemp);
             break;

@@ -79,6 +79,7 @@ void remplirIndexJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int **i
 void afficherJoueursTriesParNom(Joueur *joueursTab, int nbJoueurs);
 void afficherJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParScore[]);
 
+float calculerScoreMoyen(Joueur joueur);
 void afficherStatsJoueur(Joueur *joueursTab, int nbJoueurs);
 
 void showAllPlayers(Joueur *joueursTab, int nbJoueurs);
