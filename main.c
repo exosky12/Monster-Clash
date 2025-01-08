@@ -1273,6 +1273,12 @@ void global(void)
             printf("Au revoir...\n");
             quit = True;
             break;
+        case 666:
+            printf("Tu t'es fait troll AHHAHA\n");
+            printf("Appuyer sur entrée pour continuer...");
+            getchar();
+            getchar();
+            break;
         default:
             printf("Choix invalide\n");
 
