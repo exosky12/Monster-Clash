@@ -43,12 +43,6 @@ typedef struct
     char *armes;  // Liste des armes disponibles ('P', 'F', 'C', 'O', '#')
 } Monstre;
 
-typedef struct
-{
-    Joueur *joueurs; // Tableau dynamique de joueurs
-    int nbJoueurs;   // Nombre total de joueurs
-} TableauDeScores;
-
 File fileVide(void);
 File ajouter(File f, int x);
 File supprimerTete(File f);
@@ -60,8 +54,8 @@ int longueur(File f);
 void global(void);
 void clearScreen(void);
 void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTab[], int indexMonstresTabGroupe1[], int nbMonstresGroup1);
-int gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres);
-int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres);
+int gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres, int pointsJoueur);
+int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres, int pointsJoueur);
 
 void sauvegarderScoreJoueur(Joueur *joueursTab, int indexJoueur, int pointsGagnes);
 
@@ -79,3 +73,6 @@ void saveJoueursToBinary(char *filenom, Joueur *joueurs, int nbJoueurs);
 
 int biggestScore(Joueur *JoueursTab[], int nbJoueurs);
 int MinScore(Joueur *JoueursTab[], int nbJoueurs);
+
+void remplirIndexJoueursTriesParNom(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParNom[]);
+void remplirIndexJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParScore[]);
