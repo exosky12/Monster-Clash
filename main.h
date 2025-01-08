@@ -85,4 +85,3 @@ void afficherStatsJoueur(Joueur *joueursTab, int nbJoueurs);
 void showAllPlayers(Joueur *joueursTab, int nbJoueurs);
 
 void insererJoueurOrdreAlphabetique(Joueur **joueursTab, int *nbJoueurs, int indexTemp);
-void echangerPosition(Joueur **joueursTab, int index1, int index2);

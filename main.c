@@ -261,11 +261,11 @@ int rechercheDicoJoueur(char pseudoJoueur[50], Joueur joueursTab[], int nbJoueur
         }
         if (strcmp(pseudoJoueur, joueursTab[m].pseudo) < 0)
         {
-            sup = m - 1;
+            inf = m + 1;
         }
         else
         {
-            inf = m + 1;
+            sup = m - 1;
         }
     }
     *trouve = 0;
@@ -274,15 +274,22 @@ int rechercheDicoJoueur(char pseudoJoueur[50], Joueur joueursTab[], int nbJoueur
 
 int rechercheArme(char arme, char armes[], int nbArmes)
 {
-    for (int i = 0; i < nbArmes; i++)
+    // Cas de base : si la taille du tableau est 0, l'élément n'est pas trouvé
+    if (nbArmes == 0)
     {
-        if (arme == armes[i])
-        {
-            return 1;
-        }
+        return 0;
     }
-    return 0;
+
+    // Vérifie si l'élément courant est l'arme recherchée
+    if (armes[nbArmes - 1] == arme)
+    {
+        return 1;
+    }
+
+    // Appel récursif en réduisant la taille du tableau
+    return rechercheArme(arme, armes, nbArmes - 1);
 }
+
 
 // Ajouter type de retour et paramètres
 int gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres, int pointsJoueur)
@@ -1115,28 +1122,41 @@ void showAllPlayers(Joueur *joueursTab, int nbJoueurs)
 
 void insererJoueurOrdreAlphabetique(Joueur **joueursTab, int *nbJoueurs, int indexTemp)
 {
-    // Stocker le joueur à déplacer
-    Joueur joueurTemp = (*joueursTab)[indexTemp]; 
+    // Stocker temporairement le joueur à déplacer
+    Joueur joueurTemp = (*joueursTab)[indexTemp];
     int indexOuInserer, trouve;
 
     // Recherche de l'index où insérer le joueur
     indexOuInserer = rechercheDicoJoueur(joueurTemp.pseudo, *joueursTab, *nbJoueurs, &trouve);
 
-    if(indexTemp == indexOuInserer)
+    // Si le joueur est déjà à la bonne position, rien à faire
+    if (indexTemp == indexOuInserer)
     {
         return;
     }
-    echangerPosition(joueursTab, indexTemp, indexOuInserer);
+
+    // Décaler les joueurs pour insérer à la bonne position
+    if (indexTemp < indexOuInserer)
+    {
+        // Décaler les joueurs vers la gauche si le joueur doit aller après
+        for (int i = indexTemp; i < indexOuInserer - 1; i++)
+        {
+            (*joueursTab)[i] = (*joueursTab)[i + 1];
+        }
+    }
+    else if (indexTemp > indexOuInserer)
+    {
+        // Décaler les joueurs vers la droite si le joueur doit aller avant
+        for (int i = indexTemp; i > indexOuInserer; i--)
+        {
+            (*joueursTab)[i] = (*joueursTab)[i - 1];
+        }
+    }
+
+    // Insérer le joueur à la bonne position
+    (*joueursTab)[indexOuInserer] = joueurTemp;
 }
 
-void echangerPosition(Joueur **joueursTab, int index1, int index2)
-{
-    // Échanger les joueurs
-
-    Joueur joueurTemp = (*joueursTab)[index1];
-    (*joueursTab)[index1] = (*joueursTab)[index2];
-    (*joueursTab)[index2] = joueurTemp;
-}
 
 
 void global(void)
@@ -1205,6 +1225,7 @@ void global(void)
             getchar();
             break;
         }
+        choice = 0;
     }
 
     saveJoueursToBinary("game.dat", joueursTab, nbJoueurs);
