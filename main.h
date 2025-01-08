@@ -29,7 +29,7 @@ typedef struct
     int nbDegats;    // Nombre total de dégâts infligés par le joueur
     int nbParties;   // Nombre de jeux/joues auxquels le joueur a participé
     int *scores;     // Scores
-    char armes[4];   // Liste des armes disponibles pour le joueur ('P', 'F', 'C', 'O', '#')
+    char armes[4];   // Liste des armes disponibles pour le joueur ('P', 'F', 'C')
 } Joueur;
 
 typedef struct
@@ -74,5 +74,12 @@ void saveJoueursToBinary(char *filenom, Joueur *joueurs, int nbJoueurs);
 int biggestScore(Joueur *JoueursTab[], int nbJoueurs);
 int MinScore(Joueur *JoueursTab[], int nbJoueurs);
 
+void trieScoreJoueur(Joueur *JoueursTab[], int nbJoueurs);
+
 void remplirIndexJoueursTriesParNom(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParNom[]);
 void remplirIndexJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParScore[]);
+
+void afficherJoueursTriesParNom(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParNom[]);
+void afficherJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParScore[]);
+
+void afficherStatsJoueur(Joueur *joueursTab, int nbJoueurs);

@@ -35,7 +35,9 @@ Le format ce présente comme suit:
 
 ## Reste à faire
 
-- Partie prédéfinie
-- Fonction d'affichage des statistiques des joueurs (trié par nom/score)
-- Niveau sur le joueur (optionnel)
-- Vérifier quoi free
+- Fonction stats à vérifier (segmentation fault)
+- partie prédéfinie à finir
+- sauvegarde de score ?
+- trier tableau pour recherche dico
+- ajouter récursivité
+- améliorer affichage [5]

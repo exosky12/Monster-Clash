@@ -97,11 +97,19 @@ int longueur(File f)
     return i;
 }
 
-void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTab[], int indexMonstresTabGroupe1[], int nbMonstresGroupe1)
+/*
+void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
 {
+    int *indexMonstresGroupe1 = NULL;
+    int *indexMonstresGroupe2 = NULL;
+    int nbMonstresGroupe1 = 0;
+    int nbMonstresGroupe2 = 0;
+
+    Monstre *monstresTab = NULL;
+
     clearScreen();
     printf(GRAS VERT "▁ ▂ ▄ ▅ ▆ ▇ █ Jouer une partie prédéfinie █ ▇ ▆ ▅ ▄ ▂ ▁\n\n" RESET);
-   
+
     // Demander le pseudo du joueur
     char pseudoJoueur[50];
     printf("Entrez le pseudo du joueur > ");
@@ -148,11 +156,96 @@ void PartiePredefinie(Joueur **joueursTab, int *nbJoueurs, Monstre monstresTab[]
         scanf("%d", &choixOrdreGroupe);
     }
 
+    int nbMonstres;
     printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans le groupe %d\n" RESET, choixOrdreGroupe);
     printf("> ");
-    scanf("%d", &choixOrdreGroupe);
-    gameGroupe1(joueur, *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1);
+    scanf("%d", &nbMonstres);
+    while (nbMonstres < 1)
+    {
+        printf(ROUGE "[ERREUR] Nombre de monstres incorrect\n" RESET);
+        printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans le groupe %d\n" RESET, choixOrdreGroupe);
+    }
+
+    int nbMonstresGroupeChoisi = 0;
+
+    for (int i = 1; i <= nbMonstres; i++)
+    {
+        Monstre monstre;
+        printf(JAUNE "[ACTION] Quel nom souhaitez vous pour votre monstre numéro %d\n" RESET, nbMonstres);
+        printf("> ");
+        char nomMonstre[50];
+        scanf("%s", nomMonstre);
+        strcpy(monstre.nom, nomMonstre);
+
+        int niveauMonstre;
+        printf(JAUNE "[ACTION] Quel niveau souhaitez vous pour votre monstre numéro %d (Niveau 1, 2 ou 3)\n" RESET, nbMonstres);
+        printf("> ");
+        scanf("%d", &niveauMonstre);
+        while (niveauMonstre != 1 || niveauMonstre != 2 || niveauMonstre != 3)
+        {
+            printf(ROUGE "[ERREUR] Niveau de monstre incorrect\n" RESET);
+            printf(JAUNE "[ACTION] Quel niveau souhaitez vous pour votre monstre numéro %d (Niveau 1, 2 ou 3)\n" RESET, nbMonstres);
+        }
+        monstre.niveau = niveauMonstre;
+        if (choixOrdreGroupe == 1)
+        {
+            monstresTab[i] = monstre;
+            indexMonstresTabGroupe1[i] = i;
+            nbMonstresGroupe1++;
+        }
+        else
+        {
+            monstresTab[i] = monstre;
+            indexMonstresTabGroupe2[i] = i;
+            nbMonstresGroupe2++;
+        }
+        nbMonstresGroupeChoisi = i;
+    }
+
+    int nbMonstres;
+    printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans l'autre groupe\n" RESET);
+    printf("> ");
+    scanf("%d", &nbMonstres);
+    while (nbMonstres < 1)
+    {
+        printf(ROUGE "[ERREUR] Nombre de monstres incorrect\n" RESET);
+        printf(JAUNE "[ACTION] Combien voulez-vous de monstres dans l'autre groupe'\n" RESET);
+    }
+
+    for (int i = 1; i <= nbMonstres; i++)
+    {
+        Monstre monstre;
+        printf(JAUNE "[ACTION] Quel nom souhaitez vous pour votre monstre numéro %d\n" RESET, nbMonstres);
+        printf("> ");
+        char nomMonstre[50];
+        scanf("%s", nomMonstre);
+        strcpy(monstre.nom, nomMonstre);
+
+        int niveauMonstre;
+        printf(JAUNE "[ACTION] Quel niveau souhaitez vous pour votre monstre numéro %d (Niveau 1, 2 ou 3)\n" RESET, nbMonstres);
+        printf("> ");
+        scanf("%d", &niveauMonstre);
+        while (niveauMonstre != 1 || niveauMonstre != 2 || niveauMonstre != 3)
+        {
+            printf(ROUGE "[ERREUR] Niveau de monstre incorrect\n" RESET);
+            printf(JAUNE "[ACTION] Quel niveau souhaitez vous pour votre monstre numéro %d (Niveau 1, 2 ou 3)\n" RESET, nbMonstres);
+        }
+        monstre.niveau = niveauMonstre;
+        if (choixOrdreGroupe == 1)
+        {
+            monstresTab[i + nbMonstresGroupeChoisi] = monstre;
+            indexMonstresTabGroupe2[i] = i + nbMonstresGroupeChoisi;
+            nbMonstresGroupe2++;
+        }
+        else
+        {
+            monstresTab[i + nbMonstresGroupeChoisi] = monstre;
+            indexMonstresTabGroupe1[i] = i + nbMonstresGroupeChoisi;
+            nbMonstresGroupe1++;
+        }
+    }
 }
+*/
 
 int rechercheDicoJoueur(char pseudoJoueur[50], Joueur joueursTab[], int nbJoueurs, int *trouve)
 {
@@ -368,26 +461,26 @@ int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
         char armeChoisie;
         scanf(" %c", &armeChoisie);
 
-    int trouve = 0;
+        int trouve = 0;
 
-    while (trouve == 0)
-    {
-        trouve = rechercheArme(armeChoisie, joueur.armes, 4);
-
-        if (trouve == 0)
+        while (trouve == 0)
         {
-            printf(ROUGE "[ERREUR] Arme invalide, veuillez choisir une arme parmi " RESET);
+            trouve = rechercheArme(armeChoisie, joueur.armes, 4);
 
-            // Affichage des armes disponibles
-            for (int j = 0; j < 4; j++)
+            if (trouve == 0)
             {
-                printf(ROUGE " %c" RESET, joueur.armes[j]);
-            }
+                printf(ROUGE "[ERREUR] Arme invalide, veuillez choisir une arme parmi " RESET);
 
-            printf(" > ");
-            scanf(" %c", &armeChoisie);
+                // Affichage des armes disponibles
+                for (int j = 0; j < 4; j++)
+                {
+                    printf(ROUGE " %c" RESET, joueur.armes[j]);
+                }
+
+                printf(" > ");
+                scanf(" %c", &armeChoisie);
+            }
         }
-    }
 
         // Index de l'arme du monstre choisie aléatoirement
         int indexArmeMonstre = rand() % monstreActuel.nbArmes;
@@ -412,7 +505,7 @@ int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
             // Points gagnés par le joueur
             int pointsGagnes = 10;
             printf(VERT "\t[VICTOIRE] %s(%dptV) gagne contre %s(%dptV)\t\t+%dpts\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv, pointsGagnes);
-            
+
             // Si le monstre est mort
             if (monstreActuel.pv <= 0)
             {
@@ -534,7 +627,7 @@ void createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresT
 void sauvegarderScoreJoueur(Joueur *joueursTab, int indexJoueur, int pointsGagnes)
 {
     joueursTab[indexJoueur].scores = (int *)realloc(joueursTab[indexJoueur].scores, (joueursTab[indexJoueur].nbParties) * sizeof(int));
-    joueursTab[indexJoueur].scores[joueursTab[indexJoueur].nbParties-1] = pointsGagnes;
+    joueursTab[indexJoueur].scores[joueursTab[indexJoueur].nbParties - 1] = pointsGagnes;
 }
 
 char determinerGagnant(char armeJoueur, char armeMonstre)
@@ -883,7 +976,6 @@ int MinScore(Joueur *JoueursTab[], int nbJoueurs)
     return min;
 }
 
-/*
 void trieScoreJoueur(Joueur *JoueursTab[], int nbJoueurs)
 {
     Joueur *JoueurTemp;
@@ -901,7 +993,6 @@ void trieScoreJoueur(Joueur *JoueursTab[], int nbJoueurs)
         }
     }
 }
-*/
 
 void remplirIndexJoueursTriesParNom(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParNom[])
 {
@@ -957,9 +1048,49 @@ void remplirIndexJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int ind
     }
 }
 
-void afficherJoueursTriesParNom_Recur(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParScore[])
+void afficherJoueursTriesParNom(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParNom[])
 {
+    printf("Pesudo | Points\n");
+    for (int i = 0; i < nbJoueurs; i++)
+    {
+        printf("%s | %d\n", joueursTab[indexJoueursTriesParNom[i]].pseudo, joueursTab[indexJoueursTriesParNom[i]].scores[0]);
+    }
+}
 
+void afficherJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int indexJoueursTriesParScore[])
+{
+    printf("Pesudo | Points\n");
+    for (int i = 0; i < nbJoueurs; i++)
+    {
+        printf("%s | %d\n", joueursTab[indexJoueursTriesParScore[i]].pseudo, joueursTab[indexJoueursTriesParScore[i]].scores[0]);
+    }
+}
+
+void afficherStatsJoueur(Joueur *joueursTab, int nbJoueurs)
+{
+    char pseudoJoueur[50];
+    int index, trouve;
+    printf("Entrez le pseudo du joueur dont vous voulez afficher les statistiques : ");
+    scanf("%s", pseudoJoueur);
+    index = rechercheDicoJoueur(pseudoJoueur, joueursTab, nbJoueurs, &trouve);
+    if (trouve == 0)
+    {
+        printf("Joueur introuvable\n");
+    }
+    else
+    {
+        printf("Pseudo : %s\n", joueursTab[index].pseudo);
+        printf("Points de vie : %d\n", joueursTab[index].nbPv);
+        printf("Dégâts : %d\n", joueursTab[index].nbDegats);
+        printf("Nombre de parties jouées : %d\n", joueursTab[index].nbParties);
+        printf("Scores : ");
+        for (int i = 0; i < joueursTab[index].nbParties; i++)
+        {
+            printf("%d ", joueursTab[index].scores[i]);
+        }
+        printf("\n");
+        printf("Armes : %s\n", joueursTab[index].armes);
+    }
 }
 
 void global(void)
@@ -975,7 +1106,7 @@ void global(void)
     int *indexJoueursTriesParScore = NULL;
 
     Joueur *joueursTab = loadJoueursFromBinary("game.dat", &nbJoueurs);
-    Monstre *monstres = loadMonstres("monstres.txt", &nbMonstres, &indexMonstresGroupe1, &indexMonstresGroupe2, &nbMonstresGroupe1, &nbMonstresGroupe2);
+    Monstre *monstresTab = loadMonstres("monstres.txt", &nbMonstres, &indexMonstresGroupe1, &indexMonstresGroupe2, &nbMonstresGroupe1, &nbMonstresGroupe2);
 
     while (!quit)
     {
@@ -999,16 +1130,16 @@ void global(void)
             // existingGameDisplay(&joueursTab, &nbJoueurs, monstres, indexMonstresGroupe1, nbMonstres);
             break;
         case 2:
-            createNewGameDisplay(&nbJoueurs, &joueursTab, monstres, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
+            createNewGameDisplay(&nbJoueurs, &joueursTab, monstresTab, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
             break;
         case 3:
-            // showAllJoueurs(joueursTab, nbJoueurs);
+            afficherJoueursTriesParNom(joueursTab, nbJoueurs, indexJoueursTriesParNom);
             break;
         case 4:
-            // showAllbybiggestScores(joueursTab, nbJoueurs);
+            afficherJoueursTriesParScore(joueursTab, nbJoueurs, indexJoueursTriesParScore);
             break;
         case 5:
-            // ShowJoueurPreciseStats(joueursTab, nbJoueurs);
+            afficherStatsJoueur(joueursTab, nbJoueurs);
             break;
         case 9:
             printf("Au revoir...\n");
@@ -1016,41 +1147,32 @@ void global(void)
             break;
         default:
             printf("Choix invalide\n");
-            
+
             printf("Appuyer sur entrée pour continuer...");
             getchar();
             getchar();
             break;
         }
     }
+
     saveJoueursToBinary("game.dat", joueursTab, nbJoueurs);
+
+    for (int i = 0; i < nbJoueurs; i++)
+    {
+        free(joueursTab[i].scores);
+    }
+
+    for (int i = 0; i < nbMonstres; i++)
+    {
+        free(monstresTab[i].armes);
+    }
+
     free(joueursTab);
-    free(monstres);
+    free(monstresTab);
     free(indexMonstresGroupe1);
     free(indexMonstresGroupe2);
     free(indexJoueursTriesParNom);
     free(indexJoueursTriesParScore);
-}
-
-void clearScreen(void)
-{
-    for (int i = 0; i < 20; i++)
-    {
-        printf("\n");
-    }
-}
-            
-            printf("Appuyer sur entrée pour continuer...");
-            getchar();
-            getchar();
-            break;
-        }
-    }
-    saveJoueursToBinary("game.dat", joueursTab, nbJoueurs);
-    free(joueursTab);
-    free(monstres);
-    free(indexMonstresGroupe1);
-    free(indexMonstresGroupe2);
 }
 
 void clearScreen(void)
