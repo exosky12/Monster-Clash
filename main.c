@@ -96,7 +96,7 @@ int longueur(File f)
     return i;
 }
 
-int PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
+int CreerPartie(Joueur **joueursTab, int *nbJoueurs)
 {
     int *indexMonstresGroupe1 = NULL;
     int *indexMonstresGroupe2 = NULL;
@@ -681,7 +681,7 @@ int gameGroupe2(Joueur *joueur, Joueur joueursTab[], Monstre monstresTab[], int 
     return pointsJoueur;
 }
 
-int creerNouvellePartie(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2)
+int PartiePredefinie(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2)
 {
     char pseudoJoueur[50];
     clearScreen();
@@ -1288,7 +1288,7 @@ void insererJoueurOrdreAlphabetique(Joueur **joueursTab, int *nbJoueurs, int ind
         }
     }
 
-    // Insérer le joueur à la bonne position
+    /// Insérer le joueur à la bonne position
     (*joueursTab)[indexOuInserer] = joueurTemp;
 }
 
@@ -1322,13 +1322,12 @@ void global(void)
         scanf(" %d", &choice);
         switch (choice)
         {
-        case 1:
-            indexTemp = PartiePredefinie(&joueursTab, &nbJoueurs);
+        case 1:indexTemp = PartiePredefinie(&nbJoueurs, &joueursTab, monstresTab, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
             trierScoresJoueur(&joueursTab[indexTemp]);
             insererJoueurOrdreAlphabetique(&joueursTab, &nbJoueurs, indexTemp);
             break;
         case 2:
-            indexTemp = creerNouvellePartie(&nbJoueurs, &joueursTab, monstresTab, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
+            indexTemp = CreerPartie(&joueursTab, &nbJoueurs);
             trierScoresJoueur(&joueursTab[indexTemp]);
             insererJoueurOrdreAlphabetique(&joueursTab, &nbJoueurs, indexTemp);
             break;
