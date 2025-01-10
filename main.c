@@ -464,7 +464,7 @@ int gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
                     printf(BLEU "\t[INFO] %s meurt sous le coup de l'attaque\t\t+%dpts\n\n\n" RESET, monstreActuel.nom, pointsGagnes);
                 }
                 // Ajout des points gagnés par le joueur
-                pointsJoueur += pointsGagnes;
+                pointsJoueur = pointsJoueur + pointsGagnes;
                 break;
             }
 
@@ -483,7 +483,8 @@ int gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
                     printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
 
                     printf(BLEU "[INFO] PERDU... Nombre de points acquis : %d\n\n" RESET, pointsJoueur);
-                    return 0;
+
+                    return pointsJoueur;
                 }
 
                 printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET,
@@ -658,7 +659,7 @@ int creerNouvellePartie(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab
 {
     char pseudoJoueur[50];
     clearScreen();
-    int index, trouve, pointsGagnes = 0;
+    int index, trouve;
     printf(GRAS VERT "▁ ▂ ▄ ▅ ▆ ▇ █ Créer une nouvelle partie █ ▇ ▆ ▅ ▄ ▂ ▁\n\n" RESET);
     printf(JAUNE "[ACTION] Entrer votre pseudo > " RESET);
     scanf("%s", pseudoJoueur);
@@ -685,12 +686,18 @@ int creerNouvellePartie(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab
 
         // ajouter le joueur
         (*joueursTab)[*nbJoueurs - 1] = joueur;
-        (*joueursTab)[*nbJoueurs - 1].nbParties = 1;
 
-        // jouer la partie
+        (*joueursTab)[*nbJoueurs - 1].nbParties++;
+        int pointsGagnes = 0;
+        // Jouer le premier groupe
         pointsGagnes = gameGroupe1((*joueursTab)[*nbJoueurs - 1], *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1, pointsGagnes);
         sauvegarderScoreJoueur(*joueursTab, *nbJoueurs - 1, pointsGagnes);
+
+        printf(BLEU "[INFO] Tous les monstres sont morts...\n\n" RESET);
+
+        // Jouer le deuxième groupe
         pointsGagnes = gameGroupe2((*joueursTab)[*nbJoueurs - 1], *joueursTab, monstresTab, indexMonstresTabGroupe2, nbMonstresGroupe2, pointsGagnes);
+
         sauvegarderScoreJoueur(*joueursTab, *nbJoueurs - 1, pointsGagnes);
 
         // afficher le résultat
@@ -707,10 +714,15 @@ int creerNouvellePartie(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab
     }
     else
     {
-        // jouer la partie
         (*joueursTab)[index].nbParties++;
+        int pointsGagnes = 0;
+        // Jouer le premier groupe
         pointsGagnes = gameGroupe1((*joueursTab)[index], *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1, pointsGagnes);
         sauvegarderScoreJoueur(*joueursTab, index, pointsGagnes);
+
+        printf(BLEU "[INFO] Tous les monstres sont morts...\n\n" RESET);
+
+        // Jouer le deuxième groupe
         pointsGagnes = gameGroupe2((*joueursTab)[index], *joueursTab, monstresTab, indexMonstresTabGroupe2, nbMonstresGroupe2, pointsGagnes);
         sauvegarderScoreJoueur(*joueursTab, index, pointsGagnes);
 
