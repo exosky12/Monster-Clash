@@ -38,7 +38,7 @@ typedef struct
     int niveau;   // Niveau du monstre (1, 2 ou 3)
     int pv;       // Points de vie du monstre
     int degats;   // Points de dégâts infligés par attaque
-    int type;     // Type du groupe : 1 pour séquentiel, 2 pour simultané
+    int type;     /// Type du groupe : 1 pour séquentiel, 2 pour simultané
     int nbArmes;  // Nombre d'armes disponibles
     char *armes;  // Liste des armes disponibles ('P', 'F', 'C', 'O', '#')
 } Monstre;
@@ -53,14 +53,14 @@ int longueur(File f);
 
 void global(void);
 void clearScreen(void);
-int PartiePredefinie(Joueur **joueursTab, int *nbJoueurs);
+int CreerPartie(Joueur **joueursTab, int *nbJoueurs);
 int gameGroupe1(Joueur *joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres, int pointsJoueur);
 int gameGroupe2(Joueur *joueur, Joueur joueursTab[], Monstre monstresTab[], int indexMonstresTab[], int nbMonstres, int pointsJoueur);
 Monstre creationMonstre(int groupe);
 
 void sauvegarderScoreJoueur(Joueur *joueursTab, int indexJoueur, int pointsGagnes);
 
-int creerNouvellePartie(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2);
+int PartiePredefinie(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2);
 char determinerGagnant(char weaponJoueur, char weaponMonstre);
 
 int rechercheDicoJoueur(char pseudoJoueur[50], Joueur joueursTab[], int nbJoueurs, int *trouve);
