@@ -504,13 +504,13 @@ int gameGroupe1(Joueur *joueur, Joueur joueursTab[], Monstre monstresTab[], int 
 
                     printf(BLEU "[INFO] PERDU... Nombre de points acquis : %d\n\n" RESET, pointsJoueur);
 
-                    // joueursTab[indexJoueur].nbPv = joueur.nbPv;
+                    
                     return pointsJoueur;
                 }
 
                 printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET,
                        joueur->pseudo, joueur->nbPv, monstreActuel.nom, monstreActuel.pv);
-                // joueursTab[indexJoueur].nbPv = joueur.nbPv;
+                
                 break;
             }
 
@@ -528,7 +528,7 @@ int gameGroupe1(Joueur *joueur, Joueur joueursTab[], Monstre monstresTab[], int 
         nbMonstres--;
         index++;
     }
-    // joueursTab[indexJoueur].nbPv = joueur.nbPv;
+    
     return pointsJoueur;
 }
 
@@ -652,13 +652,12 @@ int gameGroupe2(Joueur *joueur, Joueur joueursTab[], Monstre monstresTab[], int 
                 joueur->nbPv = 0;
                 printf(ROUGE "\t[DEFAITE] %s(%dptV) perd l'attaque contre %s(%dptV)\n\n" RESET, joueur->pseudo, joueur->nbPv, monstreActuel.nom, monstreActuel.pv);
                 printf(BLEU "[INFO] PERDU... Nombre de points acquis : %d\n\n" RESET, pointsJoueur);
-
-                // joueursTab[indexJoueur].nbPv = joueur.nbPv;
-                return 0;
+          
+                return pointsJoueur;
             }
 
             printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET, joueur->pseudo, joueur->nbPv, monstreActuel.nom, monstreActuel.pv);
-            // joueursTab[indexJoueur].nbPv = joueur.nbPv;
+            
             break;
         }
 
@@ -677,7 +676,7 @@ int gameGroupe2(Joueur *joueur, Joueur joueursTab[], Monstre monstresTab[], int 
             file = ajouter(file, monstreActuelIndex);
         }
     }
-    // joueursTab[indexJoueur].nbPv = joueur.nbPv;
+    
     return pointsJoueur;
 }
 
@@ -1223,6 +1222,9 @@ void afficherStatsJoueur(Joueur *joueursTab, int nbJoueurs)
     if (trouve == 0)
     {
         printf("Joueur introuvable\n");
+        printf("Appuyer sur entrée pour continuer...");
+        getchar();
+        getchar();
     }
     else
     {
@@ -1322,12 +1324,15 @@ void global(void)
         scanf(" %d", &choice);
         switch (choice)
         {
-        case 1:indexTemp = PartiePredefinie(&nbJoueurs, &joueursTab, monstresTab, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
+        case 1:
+            indexTemp = PartiePredefinie(&nbJoueurs, &joueursTab, monstresTab, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
+            joueursTab[indexTemp].nbPv = 20;
             trierScoresJoueur(&joueursTab[indexTemp]);
             insererJoueurOrdreAlphabetique(&joueursTab, &nbJoueurs, indexTemp);
             break;
         case 2:
             indexTemp = CreerPartie(&joueursTab, &nbJoueurs);
+            joueursTab[indexTemp].nbPv = 20;
             trierScoresJoueur(&joueursTab[indexTemp]);
             insererJoueurOrdreAlphabetique(&joueursTab, &nbJoueurs, indexTemp);
             break;
