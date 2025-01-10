@@ -198,7 +198,7 @@ int PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
 
     // realloc monstresTab
     monstresTab = (Monstre *)realloc(monstresTab, (nbMonstresDeuxiemeGrp + nbMonstresPremierGrp) * sizeof(Monstre));
-    indexMonstresGroupe2 = (int)malloc(nbMonstresDeuxiemeGrp * sizeof(int));
+    indexMonstresGroupe2 = (int *)malloc(nbMonstresDeuxiemeGrp * sizeof(int));
 
     if (indexMonstresGroupe2 == NULL)
     {
@@ -308,19 +308,19 @@ Monstre creationMonstre(int groupe)
     {
     case 1:
         monstre.nbArmes = 4;
-        monstre.armes = (char)malloc(monstre.nbArmes * sizeof(char));
+        monstre.armes = (char *)malloc(monstre.nbArmes * sizeof(char));
 
         strcpy(monstre.armes, "PFCO");
         break;
     case 2:
         monstre.nbArmes = 3;
-        monstre.armes = (char)malloc(monstre.nbArmes * sizeof(char));
+        monstre.armes = (char *)malloc(monstre.nbArmes * sizeof(char));
 
         strcpy(monstre.armes, "PFC");
         break;
     case 3:
         monstre.nbArmes = 5;
-        monstre.armes = (char)malloc(monstre.nbArmes * sizeof(char));
+        monstre.armes = (char *)malloc(monstre.nbArmes * sizeof(char));
 
         strcpy(monstre.armes, "PFCO#");
         break;
@@ -855,19 +855,19 @@ Monstre *loadMonstres(char *filenom, int *nbMonstres, int **indexMonstresGroupe1
         {
         case 1:
             monstre->nbArmes = 4;
-            monstre->armes = (char)malloc(monstre->nbArmes * sizeof(char));
+            monstre->armes = (char *)malloc(monstre->nbArmes * sizeof(char));
 
             strcpy(monstre->armes, "PFCO");
             break;
         case 2:
             monstre->nbArmes = 3;
-            monstre->armes = (char)malloc(monstre->nbArmes * sizeof(char));
+            monstre->armes = (char *)malloc(monstre->nbArmes * sizeof(char));
 
             strcpy(monstre->armes, "PFC");
             break;
         case 3:
             monstre->nbArmes = 5;
-            monstre->armes = (char)malloc(monstre->nbArmes * sizeof(char));
+            monstre->armes = (char *)malloc(monstre->nbArmes * sizeof(char));
 
             strcpy(monstre->armes, "PFCO#");
             break;
@@ -978,7 +978,7 @@ Joueur *loadJoueursFromBinary(char *filenom, int *nbJoueurs)
         if (joueur->nbParties > 0)
         {
             // Allocation dynamique pour les scores
-            joueur->scores = (int)malloc(joueur->nbParties * sizeof(int));
+            joueur->scores = (int *)malloc(joueur->nbParties * sizeof(int));
 
             // Vérification de l'allocation
             if (joueur->scores == NULL)
@@ -1065,7 +1065,7 @@ void trierScoresJoueur(Joueur *joueur)
 
 void remplirIndexJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int **indexJoueursTriesParScore)
 {
-    *indexJoueursTriesParScore = (int)malloc(nbJoueurs * sizeof(int));
+    *indexJoueursTriesParScore = (int *)malloc(nbJoueurs * sizeof(int));
 
     if (indexJoueursTriesParScore == NULL)
     {
