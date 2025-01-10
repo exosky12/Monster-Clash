@@ -169,7 +169,7 @@ int PartiePredefinie(Joueur **joueursTab, int *nbJoueurs)
 
     // Allocation dynamique pour le tableau des monstres
     monstresTab = (Monstre *)malloc(nbMonstresPremierGrp * sizeof(Monstre));
-    indexMonstresGroupe1 = (int)malloc(nbMonstresPremierGrp * sizeof(int));
+    indexMonstresGroupe1 = (int *)malloc(nbMonstresPremierGrp * sizeof(int));
     if (monstresTab == NULL)
     {
         printf("Erreur allocation\n");
