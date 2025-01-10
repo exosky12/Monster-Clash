@@ -60,20 +60,16 @@ Monstre creationMonstre(int groupe);
 
 void sauvegarderScoreJoueur(Joueur *joueursTab, int indexJoueur, int pointsGagnes);
 
-int createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2);
+int creerNouvellePartie(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2);
 char determinerGagnant(char weaponJoueur, char weaponMonstre);
 
 int rechercheDicoJoueur(char pseudoJoueur[50], Joueur joueursTab[], int nbJoueurs, int *trouve);
 int rechercheArme(char arme, char armes[], int nbArmes);
 
 Monstre *loadMonstres(char *filenom, int *nbMonstres, int **indexMonstresGroup1, int **indexMonstresGroup2, int *nbMonstresGroup1, int *nbMonstresGroup2);
-// void showEveryMonstres(Monstre *monstres, int nbMonstres);
 
 Joueur *loadJoueursFromBinary(char *filenom, int *nbJoueurs);
 void saveJoueursToBinary(char *filenom, Joueur *joueurs, int nbJoueurs);
-
-void trierScoresTousJoueurs(Joueur *joueursTab, int nbJoueurs);
-void trieScoreJoueur(Joueur *JoueursTab[], int nbJoueurs);
 
 void remplirIndexJoueursTriesParScore(Joueur *joueursTab, int nbJoueurs, int **indexJoueursTriesParScore);
 

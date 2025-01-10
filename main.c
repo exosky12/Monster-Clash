@@ -654,7 +654,7 @@ int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
     return pointsJoueur;
 }
 
-int createNewGameDisplay(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2)
+int creerNouvellePartie(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab[], int indexMonstresTabGroupe1[], int indexMonstresTabGroupe2[], int nbMonstresGroupe1, int nbMonstresGroupe2)
 {
     char pseudoJoueur[50];
     clearScreen();
@@ -856,18 +856,36 @@ Monstre *loadMonstres(char *filenom, int *nbMonstres, int **indexMonstresGroupe1
         case 1:
             monstre->nbArmes = 4;
             monstre->armes = (char *)malloc(monstre->nbArmes * sizeof(char));
+            if (monstre->armes == NULL)
+            {
+                printf("Erreur d'allocation mémoire\n");
+                fclose(file);
+                return NULL;
+            }
 
             strcpy(monstre->armes, "PFCO");
             break;
         case 2:
             monstre->nbArmes = 3;
             monstre->armes = (char *)malloc(monstre->nbArmes * sizeof(char));
+            if (monstre->armes == NULL)
+            {
+                printf("Erreur d'allocation mémoire\n");
+                fclose(file);
+                return NULL;
+            }
 
             strcpy(monstre->armes, "PFC");
             break;
         case 3:
             monstre->nbArmes = 5;
             monstre->armes = (char *)malloc(monstre->nbArmes * sizeof(char));
+            if (monstre->armes == NULL)
+            {
+                printf("Erreur d'allocation mémoire\n");
+                fclose(file);
+                return NULL;
+            }
 
             strcpy(monstre->armes, "PFCO#");
             break;
@@ -882,12 +900,24 @@ Monstre *loadMonstres(char *filenom, int *nbMonstres, int **indexMonstresGroupe1
         case 1:
             *nbMonstresGroupe1 = *nbMonstresGroupe1 + 1;
             *indexMonstresGroupe1 = realloc(*indexMonstresGroupe1, *nbMonstresGroupe1 * sizeof(int));
+            if (*indexMonstresGroupe1 == NULL)
+            {
+                printf("Erreur d'allocation mémoire\n");
+                fclose(file);
+                return NULL;
+            }
             (*indexMonstresGroupe1)[*nbMonstresGroupe1 - 1] = i;
 
             break;
         case 2:
             *nbMonstresGroupe2 = *nbMonstresGroupe2 + 1;
             *indexMonstresGroupe2 = realloc(*indexMonstresGroupe2, *nbMonstresGroupe2 * sizeof(int));
+            if (*indexMonstresGroupe2 == NULL)
+            {
+                printf("Erreur d'allocation mémoire\n");
+                fclose(file);
+                return NULL;
+            }
             (*indexMonstresGroupe2)[*nbMonstresGroupe2 - 1] = i;
 
             break;
@@ -1228,7 +1258,6 @@ void global(void)
     // Chargement des données
     Joueur *joueursTab = loadJoueursFromBinary("game.dat", &nbJoueurs);
     Monstre *monstresTab = loadMonstres("monstres.txt", &nbMonstres, &indexMonstresGroupe1, &indexMonstresGroupe2, &nbMonstresGroupe1, &nbMonstresGroupe2);
-
     int *indexJoueursTriesParScore = NULL;
 
     while (!quit)
@@ -1252,7 +1281,7 @@ void global(void)
             insererJoueurOrdreAlphabetique(&joueursTab, &nbJoueurs, indexTemp);
             break;
         case 2:
-            indexTemp = createNewGameDisplay(&nbJoueurs, &joueursTab, monstresTab, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
+            indexTemp = creerNouvellePartie(&nbJoueurs, &joueursTab, monstresTab, indexMonstresGroupe1, indexMonstresGroupe2, nbMonstresGroupe1, nbMonstresGroupe2);
             trierScoresJoueur(&joueursTab[indexTemp]);
             insererJoueurOrdreAlphabetique(&joueursTab, &nbJoueurs, indexTemp);
             break;
