@@ -39,8 +39,4 @@ Le format ce présente comme suit:
 
 ## Reste à faire
 
-- ajouter récursivité (à voir pour quelques fonctions d'affichage de stats mais porbablement pas worse)
-  (ptre changer RechercheDicho -> recursif)
-  1 de faite
-- verifier si respect des consignes (nottement ceux sur quoi on est evalué, ex : différente fonctions de tri -> normalement c'est bon ça)
-- #s'il reste du temps niveau sur les joueurs mais vraiment à voir
+- Version finale
