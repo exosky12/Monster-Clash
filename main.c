@@ -379,6 +379,8 @@ int gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
     // index qui permet de parcourir les monstres
     int index = 0;
 
+    // int indexJoueur = rechercheDicoJoueur(joueur.pseudo, joueursTab, 1, 0);
+
     // Tant qu'il y a des monstres dans le groupe 1
     while (nbMonstres > 0)
     {
@@ -484,11 +486,13 @@ int gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
 
                     printf(BLEU "[INFO] PERDU... Nombre de points acquis : %d\n\n" RESET, pointsJoueur);
 
+                    // joueursTab[indexJoueur].nbPv = joueur.nbPv;
                     return pointsJoueur;
                 }
 
                 printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET,
                        joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
+                // joueursTab[indexJoueur].nbPv = joueur.nbPv;
                 break;
             }
 
@@ -506,6 +510,7 @@ int gameGroupe1(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
         nbMonstres--;
         index++;
     }
+    // joueursTab[indexJoueur].nbPv = joueur.nbPv;
     return pointsJoueur;
 }
 
@@ -629,10 +634,13 @@ int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
                 joueur.nbPv = 0;
                 printf(ROUGE "\t[DEFAITE] %s(%dptV) perd l'attaque contre %s(%dptV)\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
                 printf(BLEU "[INFO] PERDU... Nombre de points acquis : %d\n\n" RESET, pointsJoueur);
+
+                // joueursTab[indexJoueur].nbPv = joueur.nbPv;
                 return 0;
             }
 
             printf(ROUGE "\t[DEFAITE] %s(%dptV) perd contre %s(%dptV)\n\n" RESET, joueur.pseudo, joueur.nbPv, monstreActuel.nom, monstreActuel.pv);
+            // joueursTab[indexJoueur].nbPv = joueur.nbPv;
             break;
         }
 
@@ -651,7 +659,7 @@ int gameGroupe2(Joueur joueur, Joueur joueursTab[], Monstre monstresTab[], int i
             file = ajouter(file, monstreActuelIndex);
         }
     }
-
+    // joueursTab[indexJoueur].nbPv = joueur.nbPv;
     return pointsJoueur;
 }
 
@@ -688,6 +696,7 @@ int creerNouvellePartie(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab
         (*joueursTab)[*nbJoueurs - 1] = joueur;
 
         (*joueursTab)[*nbJoueurs - 1].nbParties++;
+
         int pointsGagnes = 0;
         // Jouer le premier groupe
         pointsGagnes = gameGroupe1((*joueursTab)[*nbJoueurs - 1], *joueursTab, monstresTab, indexMonstresTabGroupe1, nbMonstresGroupe1, pointsGagnes);
@@ -697,7 +706,6 @@ int creerNouvellePartie(int *nbJoueurs, Joueur **joueursTab, Monstre monstresTab
 
         // Jouer le deuxième groupe
         pointsGagnes = gameGroupe2((*joueursTab)[*nbJoueurs - 1], *joueursTab, monstresTab, indexMonstresTabGroupe2, nbMonstresGroupe2, pointsGagnes);
-
         sauvegarderScoreJoueur(*joueursTab, *nbJoueurs - 1, pointsGagnes);
 
         // afficher le résultat
