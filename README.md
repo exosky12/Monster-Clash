@@ -36,7 +36,3 @@ Le format ce présente comme suit:
 <nombre de joueurs>
 --struture de chaque joueur--
 ```
-
-## Reste à faire
-
-- Version finale
