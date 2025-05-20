@@ -1,40 +1,60 @@
-# Monster Clash (JEU EN LIGNE DE COMMANDES)
+# 🧟‍♂️ Monster Clash
 
-(ce projet est un projet scolaire dans lequel on devait créer un jeu en C en ligne de commandes qui faisait s'affronter un joueur contre différents groupes de monstres avec différentes spécificités)
+Monster Clash is a command-line monster battle game written in C as part of a school project. The player faces off against various groups of monsters with unique attributes.
 
-# ⚠ Suppimer ancien `game.dat` par précaution
+> ⚠️ Important  
+> Delete any existing `game.dat` file before running the game.  
+> Bugs may occur due to unsorted data from older versions.
 
-Bug pourrait survenir car non trié du à ancienne version
+## 📄 Description
 
-Devoir jeu en C
+This project simulates battles between a player and monsters, defined via text and binary files.
 
-## Description `monsters.txt`
+### monsters.txt
 
+This file defines the monsters used in the game. Format:
 ```
-5
-ChouinChouin,1,4,1,1
-Dragonus,3,6,2,1
-PetitePustule,2,6,1,2
-LutinCordial,2,6,1,2
+<number of monsters>  
+<name>,<level>,<HP>,<damage>,<group>
+```
+
+Example:
+```
+5  
+ChouinChouin,1,4,1,1  
+Dragonus,3,6,2,1  
+PetitePustule,2,6,1,2  
+LutinCordial,2,6,1,2  
 Chimere,3,6,2,2
 ```
 
-Ici le fichier `monsters.txt` suis le format suivant:
+### game.dat
 
+Binary file used to store player data.
+
+Format:
 ```
-<nombre de monstres>
-<monstre1>,<niveau>,<nombre pv>,<nombre dégâts>,<groupe du monstre>
-<monstre2>,<niveau>,<nombre pv>,<nombre dégâts>,<groupe du monstre>
-...
+<number of players>  
+-- structure of each player --
 ```
 
-## Description `game.dat`
+This file is automatically created and updated by the program.
 
-Fichier binaire contenant les données des joueurs
+## 🛠️ Compilation
 
-Le format ce présente comme suit:
-
+To build and run the program:
 ```
-<nombre de joueurs>
---struture de chaque joueur--
+gcc -o monster_clash main.c  
+./monster_clash
 ```
+
+(Replace `main.c` with your actual source file if needed.)
+
+## 🏫 Context
+
+This game was developed during a C programming course and focuses on file I/O, structures, and command-line gameplay.
+
+## 📬 Contact
+
+GitHub: https://github.com/exosky12  
+Email: exosky.dev@gmail.com
