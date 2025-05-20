@@ -56,5 +56,5 @@ This game was developed during a C programming course and focuses on file I/O, s
 
 ## 📬 Contact
 
-GitHub: https://github.com/exosky12  
-Email: exosky.dev@gmail.com
+Email: exosky.dev@gmail.com <br>
+Twitter/X: https://x.com/exosky12_
